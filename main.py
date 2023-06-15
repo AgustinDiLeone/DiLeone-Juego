@@ -1,4 +1,4 @@
-import pygame, random, sys
+import pygame, sys
 from modo import *
 from personaje import personaje
 from config import *
@@ -32,7 +32,7 @@ texto = fuente.render("mi primer juego", False, "black")
 
 #ben #################################################################
 
-ben = personaje("RECURSOS\derecha.png", (100,150), 200, 300, 10, 15, -21)
+ben = personaje("RECURSOS\derecha.png", (100,150), 200, 300, 10, 15)
 
 
 
@@ -45,7 +45,11 @@ quieto = [pygame.image.load("RECURSOS/derecha.png")]
 #PLATAFORMA ########################################################3
 piso = plataforma("RECURSOS\images.jpg", (WIDTH,200),0,HEIGHT-200)
 
-plataformas = plataforma("RECURSOS\images.jpg", (400,100),400,400)
+plataformas = plataforma("RECURSOS\images.jpg", (400,100),400,350)
+plataforma_x = plataforma("RECURSOS\images.jpg", (400,100),500,420)
+
+
+lista_plataformas = [piso, plataformas,plataforma_x]
 
 pygame.draw.rect(PANTALLA, "brown",plataformas.rect ,2)
 pygame.draw.rect(PANTALLA, "grey",piso.rect ,2)
@@ -77,15 +81,28 @@ while True:
         #ben.quieto()
         pass
 
+
+    
     PANTALLA.blit(fondo, (0,0))
     PANTALLA.blit(ben.imagen, ben.rect)
-    PANTALLA.blit(plataformas.imagen, plataformas.rect)
+    for x in lista_plataformas:
+        PANTALLA.blit(x.imagen, x.rect)
     
+    
+    ben.aplicar_gravedad(lista_plataformas)
+
     if get_mode() == True:
         pygame.draw.rect(PANTALLA, "blue",ben.rect ,2)
-        pygame.draw.rect(PANTALLA, "red",ben.rect_botton,2)
+        pygame.draw.rect(PANTALLA, "red",ben.rect_bottom,2)
         pygame.draw.rect(PANTALLA, "black",ben.rect_left,2)
         pygame.draw.rect(PANTALLA, "green",ben.rect_right,2)
         pygame.draw.rect(PANTALLA, "purple",ben.rect_top,2)
-    
+        for x in lista_plataformas:
+            pygame.draw.rect(PANTALLA, "black",x.rect,2)
+            pygame.draw.rect(PANTALLA, "blue",x.rect ,2)
+            pygame.draw.rect(PANTALLA, "red",x.rect_bottom,2)
+            pygame.draw.rect(PANTALLA, "black",x.rect_left,2)
+            pygame.draw.rect(PANTALLA, "green",x.rect_right,2)
+            pygame.draw.rect(PANTALLA, "purple",x.rect_top,2)
+        
     pygame.display.update()
