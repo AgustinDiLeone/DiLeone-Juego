@@ -23,7 +23,7 @@ pygame.display.set_icon(icono)
 
 #MUSICA ############################################################3
 pygame.mixer.music.load("RECURSOS\musica.mp3")
-pygame.mixer.music.play(-1)
+#pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.1)
 
 #fuente ##############################################################
@@ -31,22 +31,21 @@ fuente = pygame.font.SysFont("Arial",30)
 texto = fuente.render("mi primer juego", False, "black")
 
 #ben #################################################################
-
-ben = personaje("RECURSOS\derecha.png", (100,150), 200, 300, 10, 15)
-
-
-
 correr = [
     pygame.image.load("RECURSOS/derecha.png"),
     pygame.image.load("RECURSOS/izquierda.png")
 ]
 quieto = [pygame.image.load("RECURSOS/derecha.png")]
 
+lista_acciones = [quieto, correr]
+
+ben = personaje("RECURSOS\1.png", (100,150), 200, 300, 10, 15, lista_acciones,PANTALLA)
+
 #PLATAFORMA ########################################################3
 piso = plataforma("RECURSOS\images.jpg", (WIDTH,200),0,HEIGHT-200)
 
-plataformas = plataforma("RECURSOS\images.jpg", (400,100),400,350)
-plataforma_x = plataforma("RECURSOS\images.jpg", (400,100),500,420)
+plataformas = plataforma("RECURSOS\images.jpg", (100,50),200,350)
+plataforma_x = plataforma("RECURSOS\images.jpg", (70,50),500,420)
 
 
 lista_plataformas = [piso, plataformas,plataforma_x]
@@ -78,9 +77,7 @@ while True:
     elif keys[pygame.K_UP] or keys[pygame.K_w]  or keys[pygame.K_SPACE]:
         ben.saltar()
     else:
-        #ben.quieto()
-        pass
-
+        ben.quieto()
 
     
     PANTALLA.blit(fondo, (0,0))

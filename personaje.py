@@ -1,8 +1,10 @@
 import pygame
 from  config import *
+#from main import *
 
 class personaje():
-    def __init__(self, imagen, size:tuple, x, y, velocidad,potencia_salto) -> None:
+    def __init__(self, imagen, size:tuple, x, y, velocidad,potencia_salto, acciones, pantalla) -> None:
+        
         self.imagen = pygame.image.load(imagen)
         self.imagen = pygame.transform.scale(self.imagen,size)
         self.imagen_invertida = pygame.transform.flip(self.imagen, True, False)
@@ -20,6 +22,9 @@ class personaje():
         self.esta_saltando = False
         self.desplazamiento_y = 0
         self.limite_velocidad_caida = 15
+        self.contador_pasos = 0
+        self.acciones = acciones
+        self.pantalla = pantalla
 
     def mover_personaje(self, velocidad):
         for lado in range(len(self.lado_personaje)):
@@ -29,26 +34,25 @@ class personaje():
         for lado in range(len(self.lado_personaje)):
             self.lado_personaje[lado].y += velocidad
 
-    def animar_personaje(self, pantalla, rectangulo):
+    def animar_personaje(self, acciones):
         largo = len(acciones)
-        if contador_pasos >= largo:
-            contador_pasos = 0
-
-        pantalla.blit(acciones[contador_pasos],rectangulo)
-        contador_pasos += 1
+        if self.contador_pasos >= largo:
+            self.contador_pasos = 0
+        self.image = acciones[self.contador_pasos]
+        self.contador_pasos += 1
 
     def mover_derecha(self):
         if self.rect.x < WIDTH-self.rect.width:
             self.mover_personaje(self.velocidad)
-        #self.animar_personaje()
+        #self.animar_personaje(self.acciones[1])
 
     def mover_izquierda(self):
         if self.rect.x > 0:
             self.mover_personaje(self.velocidad*-1)
-        #self.animar_personaje()
+        self.animar_personaje(self.acciones[1])
     
     def quieto(self):
-        self.animar_personaje()
+        self.animar_personaje(self.acciones[0])
     
     def saltar(self):
         if not self.esta_saltando:
