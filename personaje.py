@@ -1,11 +1,11 @@
 import pygame
 from  config import *
+from disparo import Disparo
 #from main import *
 
 class personaje():
-    def __init__(self,pantalla, imagen, size:tuple, x, y, velocidad,potencia_salto, acciones) -> None:
+    def __init__(self,pantalla, imagen, size:tuple, x, y, velocidad,potencia_salto, acciones, disparo=True) -> None:
         self.pantalla = pantalla
-        #self.path_imagen = 
         self.imagen = imagen
         #self.imagen = pygame.image.load(self.path_imagen)
         #self.imagen = pygame.transform.scale(self.imagen,size)
@@ -32,6 +32,7 @@ class personaje():
         self.puntuacion = 0
         self.vidas = 3
         self.lista_proyectiles = []
+        self.path_disparo = disparo
 
         #self.cargar_animaciones()
         #self.izquierda = False
@@ -68,12 +69,14 @@ class personaje():
         self.contador_pasos += 1
 
     def mover_derecha(self):
+        self.posicion = "derecha"
         if self.rect.x < WIDTH-self.rect.width:
             self.mover_personaje(self.velocidad)
             if not self.esta_saltando:
                 self.animar_personaje(self.acciones[1])
 
     def mover_izquierda(self):
+        self.posicion = "izquierda"
         if self.rect.x > 0:
             self.mover_personaje(self.velocidad*-1)
             if not self.esta_saltando:
@@ -82,14 +85,18 @@ class personaje():
             
     def quieto(self):
         if not self.esta_saltando:
-            self.animar_personaje(self.acciones[0])
+            if self.posicion == "derecha":
+                self.animar_personaje(self.acciones[0])
+            else:
+                self.animar_personaje(self.acciones[0])
+                self.girar_imagen()
 
-    def saltar(self, salto_izquierdo=False):
+    def saltar(self):
         if not self.esta_saltando:
             self.esta_saltando = True
             self.desplazamiento_y = self.potencia_salto 
             self.animar_personaje(self.acciones[2])
-            if salto_izquierdo:
+            if self.posicion == "izquierda":
                 self.girar_imagen()
 
     def aplicar_gravedad(self, plataformas):
@@ -105,7 +112,18 @@ class personaje():
                 break
             else:
                 self.esta_saltando = True
+    
+    def disparar(self):
+        bala = Disparo(self.rect.x,self.rect.y,self.pantalla,r"RECURSOS\bola de fuego.png", self.posicion)
+        self.lista_proyectiles.append(bala)
 
     def update(self):
         self.pantalla.blit(self.imagen, self.rect)
-        
+        for x in self.lista_proyectiles:
+            x.trayectoria()
+            x.update()
+            if x.disparo_rect.left == WIDTH:
+                self.lista_proyectiles.remove(x)
+
+
+

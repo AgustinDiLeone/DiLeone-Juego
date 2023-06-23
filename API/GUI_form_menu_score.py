@@ -37,12 +37,12 @@ class FormMenuScore(Form):
                 pos_inicial_x += w/2 - margen_x
             pos_inicial_y += 100 + espacio
 
-        self._btn_home = Button_Image(self._slave , w-70,h-70,x,y,50,50,"red","magenta",self.btn_home_click,"","","Verdana",15,"Green", "API\home.png")
+        self._btn_home = Button_Image(self._slave,x,y,w-70,h-70,50,50,"API\home.png",self.btn_home_click,"","","Verdana",15,"Green","red","blue")
 
         self.lista_widgets.append(self._btn_home)
 
     def btn_home_click(self,param):
-        pass
+        self.end_dialog()
 
     def update(self,lista_eventos):
         if self.active:

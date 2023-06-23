@@ -1,6 +1,7 @@
 import pygame, sys
 from modo import *
 from personaje import personaje
+from enemigo import enemigo
 from config import *
 from plataformas import plataforma
 from API.GUI_form_prueba import *
@@ -27,8 +28,7 @@ pygame.display.set_icon(icono)
 #pygame.mixer.music.set_volume(0.1)
 
 # FUENTE ##############################################################
-fuente = pygame.font.SysFont("Arial",30)
-texto = fuente.render("mi primer juego", False, "black")
+fuente = pygame.font.SysFont("Arco Font",70)
 
 # BEN    #################################################################
 correr = [
@@ -50,23 +50,51 @@ ben = personaje(PANTALLA,quieto[0], (20,45), 80, 550, 10, -15, lista_acciones)
 
 # PLATAFORMA   ########################################################
 
-piso = plataforma(PANTALLA,r"RECURSOS\37623.png", (WIDTH,75),0,HEIGHT-75)
+piso = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (WIDTH,82),0,HEIGHT-82)
 
-plataforma_x = plataforma(PANTALLA,r"RECURSOS\37623.png", (400,50),0,260)
-plataformas_y = plataforma(PANTALLA,r"RECURSOS\37623.png", (500,50),735,460)
-plataformas_a = plataforma(PANTALLA,r"RECURSOS\37623.png", (200,50),425,370)
-plataforma_z = plataforma(PANTALLA,r"RECURSOS\37623.png", (600,50),435,150)
-plataforma_d = plataforma(PANTALLA,r"RECURSOS\37623.png", (600,52),364,574)
+plataforma_x = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (400,50),0,260)
+plataformas_y = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (500,50),735,460)
+plataformas_a = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (200,50),425,370)
+plataforma_z = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (600,50),435,150)
+plataforma_d = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (600,52),364,574)
 
 lista_plataformas = [piso, plataforma_x,plataformas_y, plataforma_z,plataforma_d,plataformas_a]
 
+# ENEMIGOS #############################################################
+
+correr_00 = [
+    pygame.image.load(r"RECURSOS\enemigo_01.png"),
+    pygame.image.load(r"RECURSOS\enemigo_02.png"),
+    pygame.image.load(r"RECURSOS\enemigo_03.png"),
+    pygame.image.load(r"RECURSOS\enemigo_04.png"),
+]
+quieto_00 = [
+    pygame.image.load(r"RECURSOS\enemigo_00.png")
+]
+enemigo_00_movimientos = [quieto_00,correr_00]
+
+enemigo_00 = enemigo(PANTALLA, quieto_00[0],(60,90),900,300,enemigo_00_movimientos,1000,430)
+
+
 # FORMULARIOS   #########################################################3
 
-form_prueba = FormPrueba(PANTALLA, 150, 150, 900,350,"gold","black", 5, True)
+info1 = pygame.Rect(0,0,WIDTH,100)
+
+#form_prueba = FormPrueba(PANTALLA, 150, 150, 900,350,"gold","black", 5, True)
+tick = pygame.USEREVENT + 0
+pygame.time.set_timer(tick,1000)
+disparo_enemigo = pygame.USEREVENT + 0
+pygame.time.set_timer(disparo_enemigo,1500)
+cronometro = 0
+texto = fuente.render(f"00:0{cronometro}", True, "White")
+
+# DISPARO 
+
 
 #####################################################
 while True:
     RELOJ.tick(FPS)
+    
     lista_eventos = pygame.event.get()
     for evento in lista_eventos:
         if evento.type == pygame.QUIT:
@@ -75,21 +103,35 @@ while True:
         elif evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_TAB:
                 cambiar_modo()
+            if evento.key == pygame.K_DELETE:
+                #form_prueba.update(lista_eventos)
+                pass
         elif evento.type == pygame.MOUSEBUTTONDOWN:
-            pos = pygame.mouse.get_pos()
-            x = pos[0]
-            y = pos[1]
-            print(x,y)
-
+            print(pygame.mouse.get_pos())
+            
+        if evento.type == tick:
+            if cronometro == 60:
+                cronometro = 0
+                texto = fuente.render(f"00:0{cronometro}", True, "White")
+            else:
+                cronometro += 1
+                if cronometro < 10:
+                    texto = fuente.render(f"00:0{cronometro}", True, "White")
+                else:
+                    texto = fuente.render(f"00:{cronometro}", True, "White")
+        if evento.type == disparo_enemigo:
+            enemigo_00.disparar()
     keys = pygame.key.get_pressed()
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
         sys.exit(0)
+    elif keys[pygame.K_p]:
+        ben.disparar()
     elif (keys[pygame.K_UP] or keys[pygame.K_w]  or keys[pygame.K_SPACE]) and (keys[pygame.K_RIGHT] or keys[pygame.K_d]):
         ben.saltar()
         ben.mover_derecha()
     elif (keys[pygame.K_UP] or keys[pygame.K_w]  or keys[pygame.K_SPACE]) and (keys[pygame.K_LEFT] or keys[pygame.K_a]):
-        ben.saltar(True)
+        ben.saltar()
         ben.mover_izquierda()
     elif keys[pygame.K_UP] or keys[pygame.K_w]  or keys[pygame.K_SPACE]:
         ben.saltar()
@@ -104,8 +146,11 @@ while True:
 
     for platform in lista_plataformas:
         platform.update()
-        
+    
     ben.update()
+
+    enemigo_00.mover()
+    enemigo_00.update()
     ben.aplicar_gravedad(lista_plataformas)
 
     if get_mode() == True:
@@ -122,5 +167,10 @@ while True:
             pygame.draw.rect(PANTALLA, "green",x.rect_right,2)
             pygame.draw.rect(PANTALLA, "purple",x.rect_top,2)
         
-    form_prueba.update(lista_eventos)
+    
+    
+
+    pygame.draw.rect(PANTALLA, "black",info1 ,100)
+    PANTALLA.blit(texto, (530,35))
+    #form_prueba.update(lista_eventos)
     pygame.display.update()
