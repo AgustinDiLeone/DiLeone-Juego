@@ -3,8 +3,9 @@ from  config import *
 from disparo import Disparo
 #from main import *
 
-class personaje():
+class personaje(pygame.sprite.Sprite):
     def __init__(self,pantalla, imagen, size:tuple, x, y, velocidad,potencia_salto, acciones, disparo=True) -> None:
+        pygame.sprite.Sprite.__init__(self)
         self.pantalla = pantalla
         self.imagen = imagen
         #self.imagen = pygame.image.load(self.path_imagen)
@@ -117,13 +118,31 @@ class personaje():
         bala = Disparo(self.rect.x,self.rect.y,self.pantalla,r"RECURSOS\bola de fuego.png", self.posicion)
         self.lista_proyectiles.append(bala)
 
-    def update(self):
-        self.pantalla.blit(self.imagen, self.rect)
-        for x in self.lista_proyectiles:
-            x.trayectoria()
-            x.update()
-            if x.disparo_rect.left == WIDTH:
-                self.lista_proyectiles.remove(x)
+    def collision(self,personaje,omnitrix):
+        if self.rect_bottom.colliderect(personaje.rect_top):
+            personaje.esta_vivo = False
+        elif self.rect.colliderect(personaje.rect) and personaje.esta_vivo:
+            self.vidas -= 1
+        if self.rect.colliderect(omnitrix.rect) and omnitrix.activo:
+            omnitrix.activo = False
+            self.puntuacion += 100
+        for x in personaje.lista_proyectiles:
+            if x.disparo_rect.colliderect(self.rect):
+                self.vidas -= 1
+                personaje.lista_proyectiles.remove(x)
+
+    def update(self,lista_plataformas,enemigo,omnitrix):
+        if self.vidas == 0:
+            self.esta_vivo == False
+        else:
+            self.pantalla.blit(self.imagen, self.rect)
+            self.aplicar_gravedad(lista_plataformas)
+            self.collision(enemigo,omnitrix)
+            for x in self.lista_proyectiles:
+                x.trayectoria()
+                x.update()
+                if x.disparo_rect.left == WIDTH:
+                    self.lista_proyectiles.remove(x)
 
 
 
