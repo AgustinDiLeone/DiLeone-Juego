@@ -1,7 +1,7 @@
-from personaje import personaje
+from personaje import Personaje
 from config import *
 
-class enemigo(personaje):
+class Enemigo(Personaje):
     def __init__(self, pantalla, imagen, size: tuple, x, y,acciones,limite_mayor, limite_menor) -> None:
         super().__init__(pantalla, imagen, size, x, y, 10, 0, acciones)
         self.limite_mayor = limite_mayor

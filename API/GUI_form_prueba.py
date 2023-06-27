@@ -73,11 +73,7 @@ class FormPrueba(Form):
         pygame.mixer.music.set_volume(self.volumen)
 
     def btn_tabla_click(self,texto):
-        dic_score = [{"Jugador":"Gio", "Score" : 1000},
-                    {"Jugador":"Manu", "Score" : 10},
-                    {"Jugador":"Mia", "Score" : 80}]
-        
         form_puntaje = FormMenuScore(self._master,340,120,500,550,"Green","White",True,"API\Window.png",
-                                    dic_score,100,10,10)
+                                    "dic_score",100,10,10)
 
         self.show_dialog(form_puntaje)

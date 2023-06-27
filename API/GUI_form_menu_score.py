@@ -4,6 +4,7 @@ from pygame.locals import *
 from API.GUI_button_image import *
 from API.GUI_form import *
 from API.GUI_label import *
+from SQL.sql import *
 
 class FormMenuScore(Form):
     def __init__(self, screen, x, y, w, h, color_background, color_border,active,path_image,
@@ -27,11 +28,18 @@ class FormMenuScore(Form):
 
         pos_inicial_y = margen_y
 
-        for j in self.score:
+        personajes_puntos = '''
+                    select nombre,puntaje
+                    from Jugadores
+                    order by puntaje desc limit 3
+                    '''
+        self.score = sql_table(personajes_puntos)
+        
+        for lista in self.score:
             pos_inicial_x = margen_x
-            for n,s in j.items():
+            for x in lista:
                 cadena = ""
-                cadena = f"{s}"
+                cadena = f"{x}"
                 jugador = Label(self._slave,pos_inicial_x,pos_inicial_y, w/2-margen_x,100, cadena,"Verdana",30,"White","API\Table.png")
                 self.lista_widgets.append(jugador)
                 pos_inicial_x += w/2 - margen_x

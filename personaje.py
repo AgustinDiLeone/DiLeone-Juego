@@ -3,7 +3,7 @@ from  config import *
 from disparo import Disparo
 #from main import *
 
-class personaje(pygame.sprite.Sprite):
+class Personaje(pygame.sprite.Sprite):
     def __init__(self,pantalla, imagen, size:tuple, x, y, velocidad,potencia_salto, acciones, disparo=True) -> None:
         pygame.sprite.Sprite.__init__(self)
         self.pantalla = pantalla

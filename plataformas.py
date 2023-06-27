@@ -12,6 +12,7 @@ class plataforma():
         self.rect_left = pygame.Rect(self.rect.left, self.rect.top,2, self.rect.height)
         self.rect_top = pygame.Rect(self.rect.left, self.rect.top, self.rect.width, 10)
         self.rect_bottom = pygame.Rect(self.rect.left, self.rect.bottom -10, self.rect.width, 10)
+        self.rectangulos = [self.rect,self.rect_bottom,self.rect_left,self.rect_right,self.rect_top]
 
     def update(self):
         self.pantalla.blit(self.imagen, self.rect)
