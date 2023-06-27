@@ -8,15 +8,13 @@ class personaje(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.pantalla = pantalla
         self.imagen = imagen
-        #self.imagen = pygame.image.load(self.path_imagen)
-        #self.imagen = pygame.transform.scale(self.imagen,size)
-        #self.imagen_invertida = pygame.transform.flip(self.imagen, True, False)
         self.rect = self.imagen.get_rect()
         self.width = size[0]
         self.height = size[1]
-        self.rect.x = x
-        self.rect.y = y
-        self.posicion = (x,y)
+        self.master_x = x
+        self.master_y = y
+        self.rect.x = self.master_x
+        self.rect.y = self.master_y
         self.posicion = "derecha"
         self.velocidad = velocidad
         self.gravedad = 1
@@ -32,13 +30,15 @@ class personaje(pygame.sprite.Sprite):
         self.esta_vivo = True
         self.puntuacion = 0
         self.vidas = 3
+        self.corazon = pygame.transform.scale(pygame.image.load("RECURSOS\corazon.png"),(50,40))
         self.lista_proyectiles = []
         self.path_disparo = disparo
+        self.retrazo_disparo = 1000
+        self.ultimo_disparo = pygame.time.get_ticks()
 
-        #self.cargar_animaciones()
-        #self.izquierda = False
-        #self.derecha = False
+        self.crear_rectangulos()
 
+    def crear_rectangulos(self):
         self.rect_right = pygame.Rect(self.rect.right -6, self.rect.top, 6, self.rect.height)
         self.rect_left = pygame.Rect(self.rect.left, self.rect.top,6, self.rect.height)
         self.rect_top = pygame.Rect(self.rect.left, self.rect.top, self.rect.width, 6)
@@ -83,7 +83,7 @@ class personaje(pygame.sprite.Sprite):
             if not self.esta_saltando:
                 self.animar_personaje(self.acciones[1])
                 self.girar_imagen()
-            
+
     def quieto(self):
         if not self.esta_saltando:
             if self.posicion == "derecha":
@@ -118,26 +118,55 @@ class personaje(pygame.sprite.Sprite):
         bala = Disparo(self.rect.x,self.rect.y,self.pantalla,r"RECURSOS\bola de fuego.png", self.posicion)
         self.lista_proyectiles.append(bala)
 
-    def collision(self,personaje,omnitrix):
-        if self.rect_bottom.colliderect(personaje.rect_top):
-            personaje.esta_vivo = False
-        elif self.rect.colliderect(personaje.rect) and personaje.esta_vivo:
-            self.vidas -= 1
-        if self.rect.colliderect(omnitrix.rect) and omnitrix.activo:
-            omnitrix.activo = False
-            self.puntuacion += 100
-        for x in personaje.lista_proyectiles:
-            if x.disparo_rect.colliderect(self.rect):
+    def collision(self,personaje,omnitrix,corazones):
+        if personaje.esta_vivo:
+            if self.rect_bottom.colliderect(personaje.rect_top):
+                personaje.esta_vivo = False
+                self.puntuacion += 200
+            elif self.rect.colliderect(personaje.rect):
                 self.vidas -= 1
-                personaje.lista_proyectiles.remove(x)
+                self.muerte()
+            for x in personaje.lista_proyectiles:
+                if x.disparo_rect.colliderect(self.rect):
+                    self.vidas -= 1
+                    self.muerte()
+                    x.disparo_activo = False
+            for x in self.lista_proyectiles:
+                if x.disparo_rect.colliderect(personaje.rect):
+                    x.disparo_activo = False
+                    personaje.esta_vivo = False
+                    self.puntuacion += 100
+        for x in omnitrix:
+            if x.activo and self.rect.colliderect(x.rect):
+                x.activo = False
+                self.puntuacion += 100
+        for x in corazones:
+            if x.activo and self.rect.colliderect(x.rect):
+                x.activo = False
+                self.puntuacion += 50
+                self.vidas += 1
+    
+    def muerte(self):
+        self.rect.x = self.master_x
+        self.rect.y = self.master_y
+        self.crear_rectangulos()
+        self.posicion = "derecha"
 
-    def update(self,lista_plataformas,enemigo,omnitrix):
+    def mostrar_vidas(self):
+        if self.vidas >= 1:
+            self.pantalla.blit(self.corazon,(100,20))
+        if self.vidas >=2:
+            self.pantalla.blit(self.corazon,(150,20))
+        if self.vidas >=3:
+            self.pantalla.blit(self.corazon,(200,20))
+
+    def update(self,lista_plataformas,enemigo,omnitrix,corazones):
         if self.vidas == 0:
             self.esta_vivo == False
         else:
             self.pantalla.blit(self.imagen, self.rect)
             self.aplicar_gravedad(lista_plataformas)
-            self.collision(enemigo,omnitrix)
+            self.collision(enemigo,omnitrix,corazones)
             for x in self.lista_proyectiles:
                 x.trayectoria()
                 x.update()

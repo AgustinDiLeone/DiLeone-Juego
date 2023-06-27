@@ -17,14 +17,12 @@ class Especial(pygame.sprite.Sprite):
         self.imagen = pygame.transform.scale(self.imagen,(60,50))   
     
     def animar(self):
-        if self.accion == 0:
-            self.accion = 1
-            self.imagen = self.animacion[0]
-            self.escaler_imagen()
-        else:
+        largo = len(self.animacion)
+        if self.accion >= largo:
             self.accion = 0
-            self.imagen = self.animacion[1]
-            self.escaler_imagen()
+        self.imagen = self.animacion[self.accion]
+        self.escaler_imagen()
+        self.accion += 1
 
     def update(self):
         if self.activo:

@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys,time
 from modo import *
 from personaje import personaje
 from enemigo import enemigo
@@ -53,13 +53,16 @@ ben = personaje(PANTALLA,quieto[0], (20,45), 80, 550, 10, -15, lista_acciones)
 
 piso = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (WIDTH,82),0,HEIGHT-82)
 
-plataforma_x = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (400,50),0,260)
-plataformas_y = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (500,50),735,460)
-plataformas_a = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (200,50),425,370)
-plataforma_z = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (600,50),435,150)
-plataforma_d = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (600,52),364,574)
+plataforma_a = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (300,50),0,260)
+plataforma_b = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (500,50),900,200)
+plataforma_c = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (300,50),0,450)
+plataforma_d = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (500,50),1070,500)
+plataforma_e = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (600,50),425,380)
+plataforma_f = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (400,52),364,574)
+plataforma_g = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (200,50),600,250)
+plataforma_h = plataforma(PANTALLA,r"RECURSOS\piso_piedra.png", (75,50),450,200)
 
-lista_plataformas = [piso, plataforma_x,plataformas_y, plataforma_z,plataforma_d,plataformas_a]
+lista_plataformas = [piso, plataforma_a,plataforma_b,plataforma_c,plataforma_d,plataforma_e,plataforma_f,plataforma_g,plataforma_h]
 
 # ENEMIGOS #############################################################
 
@@ -74,28 +77,44 @@ quieto_00 = [
 ]
 enemigo_00_movimientos = [quieto_00,correr_00]
 
-enemigo_00 = enemigo(PANTALLA, quieto_00[0],(60,90),900,300,enemigo_00_movimientos,1000,430)
+enemigo_00 = enemigo(PANTALLA, quieto_00[0],(60,90),900,300,enemigo_00_movimientos,990,430)
 
 
 # FORMULARIOS   #########################################################3
 
-info1 = pygame.Rect(0,0,WIDTH,100)
+info1 = pygame.Rect(0,0,WIDTH,75)
 
-#form_prueba = FormPrueba(PANTALLA, 150, 150, 900,350,"gold","black", 5, True)
+form_prueba = FormPrueba(PANTALLA, 150, 150, 900,350,"gold","black", 5, True)
+
 tick = pygame.USEREVENT + 0
 pygame.time.set_timer(tick,1000)
-disparo_enemigo = pygame.USEREVENT + 1
-pygame.time.set_timer(disparo_enemigo,1500)
 cronometro = 0
 tiempo = fuente.render(f"00:0{cronometro}", True, "White")
 
-# omnitrix 
+# OMNITRIX 
 omni = pygame.image.load("RECURSOS\omnitrix.png")
 imagen_omnitrix = [
     omni,
+    omni,
+    pygame.transform.flip(omni,True,False),
     pygame.transform.flip(omni,True,False)
 ]
-omnitrix = Especial(500,320,PANTALLA,imagen_omnitrix)
+omnitrix_1 = Especial(80,220,PANTALLA,imagen_omnitrix)
+omnitrix_2 = Especial(1120,460,PANTALLA,imagen_omnitrix)
+omnitrix = [omnitrix_1,omnitrix_2]
+
+# CORAZON
+cora = pygame.image.load("RECURSOS\corazon.png")
+imagen_corazon = [
+    cora,
+    cora,
+    pygame.transform.flip(cora,True,False),
+    pygame.transform.flip(cora,True,False)
+]
+corazon = Especial(1100,150,PANTALLA,imagen_corazon)
+corazones = [corazon]
+
+cronometro_1 = time.time()
 
 #####################################################
 while True:
@@ -109,39 +128,26 @@ while True:
         elif evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_TAB:
                 cambiar_modo()
-            if evento.key == pygame.K_DELETE:
-                #form_prueba.update(lista_eventos)
-                pass
             if evento.key == pygame.K_p:
                 ben.disparar()
         elif evento.type == pygame.MOUSEBUTTONDOWN:
             print(pygame.mouse.get_pos())
-            
-        if evento.type == tick:
-            if cronometro == 60:
-                cronometro = 0
-                tiempo = fuente.render(f"00:0{cronometro}", True, "White")
-            else:
-                cronometro += 1
-                if cronometro < 10:
-                    tiempo = fuente.render(f"00:0{cronometro}", True, "White")
-                else:
-                    tiempo = fuente.render(f"00:{cronometro}", True, "White")
-        if evento.type == disparo_enemigo:
-            enemigo_00.disparar()
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
         sys.exit(0)
-    #elif keys[pygame.K_p]:
-        #ben.disparar()
+    elif keys[pygame.K_p]:
+        ahora = pygame.time.get_ticks()
+        if ahora - ben.ultimo_disparo > ben.retrazo_disparo:
+            ben.disparar()
+            ben.ultimo_disparo = ahora
     elif (keys[pygame.K_UP] or keys[pygame.K_w]  or keys[pygame.K_SPACE]) and (keys[pygame.K_RIGHT] or keys[pygame.K_d]):
-        ben.saltar()
         ben.mover_derecha()
-    elif (keys[pygame.K_UP] or keys[pygame.K_w]  or keys[pygame.K_SPACE]) and (keys[pygame.K_LEFT] or keys[pygame.K_a]):
         ben.saltar()
+    elif (keys[pygame.K_UP] or keys[pygame.K_w]  or keys[pygame.K_SPACE]) and (keys[pygame.K_LEFT] or keys[pygame.K_a]):
         ben.mover_izquierda()
+        ben.saltar()
     elif keys[pygame.K_UP] or keys[pygame.K_w]  or keys[pygame.K_SPACE]:
         ben.saltar()
     elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
@@ -151,35 +157,39 @@ while True:
     else:
         ben.quieto()
     
+    tiempo_transcurrido = time.time() - cronometro_1
+    tiempo = fuente.render(f"00:{int(60-tiempo_transcurrido)}", True, "White")
 
     PANTALLA.blit(fondo, (0,0))
 
     for platform in lista_plataformas:
         platform.update()
     
-    ben.update(lista_plataformas,enemigo_00,omnitrix)
-    enemigo_00.update(ben)
-    omnitrix.update()
+    ben.update(lista_plataformas,enemigo_00,omnitrix,corazones)
+    enemigo_00.update()
+
+    for x in omnitrix:
+        x.update()
+    for x in corazones:
+        x.update()
     
 
     if get_mode() == True:
-        pygame.draw.rect(PANTALLA, "black",omnitrix.rect ,2)
-        pygame.draw.rect(PANTALLA, "blue",ben.rect ,2)
-        pygame.draw.rect(PANTALLA, "red",ben.rect_bottom,2)
-        pygame.draw.rect(PANTALLA, "black",ben.rect_left,2)
-        pygame.draw.rect(PANTALLA, "green",ben.rect_right,2)
-        pygame.draw.rect(PANTALLA, "purple",ben.rect_top,2)
-        for x in lista_plataformas:
+        form_prueba.update(lista_eventos)
+        '''
+        for x in lista_plataformas:,[ben]:#,enemigo_00],omnitrix:
             pygame.draw.rect(PANTALLA, "black",x.rect,2)
             pygame.draw.rect(PANTALLA, "blue",x.rect ,2)
             pygame.draw.rect(PANTALLA, "red",x.rect_bottom,2)
             pygame.draw.rect(PANTALLA, "black",x.rect_left,2)
             pygame.draw.rect(PANTALLA, "green",x.rect_right,2)
             pygame.draw.rect(PANTALLA, "purple",x.rect_top,2)
-        
+        '''
     pygame.draw.rect(PANTALLA, "black",info1 ,100)
     score = fuente.render(f"Score:{ben.puntuacion}", True, "White")
-    PANTALLA.blit(tiempo, (530,35))
-    PANTALLA.blit(score, (912,35))
+    vidas = fuente.render(f"Vidas:{ben.vidas}", True, "White")
+    PANTALLA.blit(tiempo, (500,20))
+    PANTALLA.blit(score, (912,20))
+    ben.mostrar_vidas()
     #form_prueba.update(lista_eventos)
     pygame.display.update()

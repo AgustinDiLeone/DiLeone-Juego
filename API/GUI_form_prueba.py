@@ -77,7 +77,7 @@ class FormPrueba(Form):
                     {"Jugador":"Manu", "Score" : 10},
                     {"Jugador":"Mia", "Score" : 80}]
         
-        form_puntaje = FormMenuScore(self._master,250,25,500,550,"Green","White",True,"API\Window.png",
+        form_puntaje = FormMenuScore(self._master,340,120,500,550,"Green","White",True,"API\Window.png",
                                     dic_score,100,10,10)
 
         self.show_dialog(form_puntaje)

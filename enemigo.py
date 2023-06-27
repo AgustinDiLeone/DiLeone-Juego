@@ -1,6 +1,5 @@
 from personaje import personaje
 from config import *
-from disparo import Disparo
 
 class enemigo(personaje):
     def __init__(self, pantalla, imagen, size: tuple, x, y,acciones,limite_mayor, limite_menor) -> None:
@@ -19,22 +18,25 @@ class enemigo(personaje):
             self.direccion()
             if self.posicion == "derecha":
                 super().mover_derecha()
-            else:
+            elif self.posicion == "izquierda":
                 super().mover_izquierda()
+    
     def collision(self,personaje):
         for x in personaje.lista_proyectiles:
             if x.disparo_rect.colliderect(self.rect):
                 self.esta_vivo = False
+                personaje.lista_proyectiles.remove(x)
 
-    def update(self,personaje):
+    def update(self):
         if self.esta_vivo == True:
             self.mover()
             self.pantalla.blit(self.imagen, self.rect)
-            self.collision(personaje)
             for x in self.lista_proyectiles:
                 x.trayectoria()
                 x.update()
                 if x.disparo_rect.left == WIDTH or 0:
                     self.lista_proyectiles.remove(x)
+        else:
+            self.rect = None
 
 
