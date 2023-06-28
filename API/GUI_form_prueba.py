@@ -1,12 +1,15 @@
 import pygame
 from pygame.locals import *
-
+from config import*
 from API.GUI_button import *
 from API.GUI_slider import *
 from API.GUI_textbox import *
 from API.GUI_label import *
 from API.GUI_form import *
 from API.GUI_form_menu_score import *
+from API.GUI_checkbox import *
+from API.GUI_picture_box import *
+from API.GUI_form_menu_play import *
 
 
 class FormPrueba(Form):
@@ -26,6 +29,9 @@ class FormPrueba(Form):
         self.label_volume = Label(self._slave,650,190,100,50,"20%","Comic Sans", 15,"white", "API\Table.png")
         self.slider_volumen = Slider(self._slave,x,y,100,200,500,15,self.volumen,"black","green")
         self.boton_tabla = Button_Image(self._slave,x,y,255,100,50,50,"API\Menu_BTN.png",self.btn_tabla_click,"fghj")
+        self.boton_jugar = Button_Image(self._slave,x,y,300,100,50,50,"RECURSOS\omnitrix.png",self.btn_jugar_click,"a")
+        #self.checkbox = CheckBox(self._slave,x,y,100,230,50,50,r"API\boton_on.png",r"API\home.png")
+        #self.picture_box = PictureBox(self._slave,300,230,100,50,"API\home.png")
 
         # AGREGAR #############################
         self.lista_widgets.append(self.textbox)
@@ -33,7 +39,9 @@ class FormPrueba(Form):
         self.lista_widgets.append(self.label_volume)
         self.lista_widgets.append(self.slider_volumen)
         self.lista_widgets.append(self.boton_tabla)
-
+        self.lista_widgets.append(self.boton_jugar)
+        #self.lista_widgets.append(self.checkbox)
+        #self.lista_widgets.append(self.picture_box)
         pygame.mixer.music.load("RECURSOS\musica.mp3")
         pygame.mixer.music.set_volume(self.volumen)
         pygame.mixer.music.play(-1)
@@ -54,6 +62,11 @@ class FormPrueba(Form):
     def render(self):
         self._slave.fill(self._color_background)
 
+    def btn_jugar_click(self,param):
+        frm_jugar = FormMenuPlay(self._master,self._master.get_width()/2-250,self._master.get_height()/2-250,
+                                500,500,MAGENTA,"API\Window.png",WHITE,True)
+        self.show_dialog(frm_jugar)
+        
     def btn_play_click(self,param):
         if self.flag_play:
             pygame.mixer.music.pause()

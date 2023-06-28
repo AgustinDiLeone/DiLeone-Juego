@@ -1,13 +1,14 @@
 import pygame, sys,time
 from modo import *
+from config import *
 from personaje import Personaje
 from enemigo import Enemigo
 from especiales import Especial
-from config import *
-from plataformas import plataforma
-from API.GUI_form_prueba import *
 
-class Nivel:
+from plataformas import plataforma
+#from API.GUI_form_prueba import *
+
+class Nivel():
     def __init__(self,pantalla,personaje_principal,lista_plataformas,imagen_fondo,enemigo,omnitrix,corazones) -> None:
         self.slave = pantalla
         self.jugador = personaje_principal
@@ -16,6 +17,7 @@ class Nivel:
         self.enemigo = enemigo
         self.omnitrix = omnitrix
         self.corazones = corazones
+        self.comienzo = time.time()
 
     def leer_inputs(self):
         keys = pygame.key.get_pressed()
@@ -44,13 +46,10 @@ class Nivel:
     
     def leer_eventos(self,lista_eventos):
         for evento in lista_eventos:
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit(0)
-            elif evento.type == pygame.KEYDOWN:
+            if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_TAB:
                     cambiar_modo()
-            elif evento.type == pygame.MOUSEBUTTONDOWN:
+            if evento.type == pygame.MOUSEBUTTONDOWN:
                 print(pygame.mouse.get_pos())
 
     def dibujar_rectangulos(self):
@@ -62,37 +61,28 @@ class Nivel:
                 pygame.draw.rect(self.slave, "green",lado,2)
 
     def actualizar_pantalla(self):
-        
         self.slave.blit(self.img_fondo, (0,0))
-
         for platform in self.plataformas:
             platform.update()
-        
         self.jugador.update(self.plataformas,self.enemigo,self.omnitrix,self.corazones)
         self.enemigo.update()
-
         for x in self.omnitrix:
             x.update()
         for x in self.corazones:
             x.update()
         # FUENTE ##############################################################
         fuente = pygame.font.SysFont("Arco Font",70)
-
         # FORMULARIOS   #########################################################3
         info1 = pygame.Rect(0,0,WIDTH,75)
         pygame.draw.rect(self.slave, "black",info1 ,100)
 
-        tiempo_transcurrido = time.time() - 0
+        tiempo_transcurrido = time.time() - self.comienzo
         tiempo = fuente.render(f"00:{int(60-tiempo_transcurrido)}", True, "White")
         
         score = fuente.render(f"Score:{self.jugador.puntuacion}", True, "White")
-        self.pantalla.blit(tiempo, (500,20))
+        self.slave.blit(tiempo, (500,20))
         self.slave.blit(score, (912,20))
         self.jugador.mostrar_vidas()
-
-        form_prueba = FormPrueba(self.pantalla, 150, 150, 900,350,"gold","black", 5, True)
-
-
 
     def update(self,lista_eventos):
         self.leer_inputs()

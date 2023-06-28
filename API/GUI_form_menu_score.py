@@ -17,6 +17,10 @@ class FormMenuScore(Form):
         self.score = score
 
         self.magen_y = margen_y
+
+        self._btn_home = Button_Image(self._slave,x,y,w-70,h-70,50,50,"API\home.png",self.btn_home_click,"","","Verdana",15,"Green","red","blue")
+
+        self.lista_widgets.append(self._btn_home)
         
         label_jugador = Label(self._slave, x=margen_x + 10, y = 20, w=w/2-margen_x-10, h=50, text="jugador", 
                         font="Verdana", font_size=30,font_color="White",path_image= r"API\bar.png")
@@ -25,6 +29,7 @@ class FormMenuScore(Form):
         
         self.lista_widgets.append(label_jugador)
         self.lista_widgets.append(label_personaje)
+
 
         pos_inicial_y = margen_y
 
@@ -44,10 +49,6 @@ class FormMenuScore(Form):
                 self.lista_widgets.append(jugador)
                 pos_inicial_x += w/2 - margen_x
             pos_inicial_y += 100 + espacio
-
-        self._btn_home = Button_Image(self._slave,x,y,w-70,h-70,50,50,"API\home.png",self.btn_home_click,"","","Verdana",15,"Green","red","blue")
-
-        self.lista_widgets.append(self._btn_home)
 
     def btn_home_click(self,param):
         self.end_dialog()

@@ -1,5 +1,8 @@
-from nivel_uno import *
+import sys
+from nivel_uno import NivelUno
+from nivel_dos import NivelDos
 from config import *
+from API.GUI_form_prueba import *
 
 pygame.init()
 
@@ -20,18 +23,17 @@ pygame.display.set_icon(icono)
 fuente = pygame.font.SysFont("Arco Font",70)
 cronometro = pygame.time.get_ticks
 
-nivel_actual = NivelUno(PANTALLA)
+form_prueba = FormPrueba(PANTALLA, 150, 150, 900,350,"gold","black", 5, True)
 
 while True:
     RELOJ.tick(FPS)
-    
+    PANTALLA.fill("green")
     lista_eventos = pygame.event.get()
     for evento in lista_eventos:
         if evento.type == pygame.QUIT:
             pygame.quit()
             sys.exit(0)
     
-    print(cronometro) 
-    nivel_actual.update(lista_eventos)
+    form_prueba.update(lista_eventos)
 
     pygame.display.update()

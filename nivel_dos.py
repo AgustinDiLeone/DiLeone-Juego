@@ -4,9 +4,9 @@ from nivel import *
 from config import *
 
 
-class NivelUno(Nivel):
+class NivelDos(Nivel):
     def __init__(self, pantalla) -> None:
-        self.slave = pantalla
+        self.pantalla = pantalla
         # FONDO ############################################
         img_fondo = pygame.image.load(r"RECURSOS\fondo_ben.jpg")
         img_fondo = pygame.transform.scale(img_fondo, SIZE_SCREEN)
@@ -36,20 +36,20 @@ class NivelUno(Nivel):
 
         lista_acciones = [quieto, correr, saltando]
 
-        personaje_principal = Personaje(self.slave,quieto[0], (20,45), 80, 550, 10, -15, lista_acciones)
+        personaje_principal = Personaje(self.pantalla,quieto[0], (20,45), 80, 550, 10, -15, lista_acciones)
 
         # PLATAFORMA   ########################################################
 
-        piso = plataforma(self.slave,r"RECURSOS\piso_piedra.png", (WIDTH,82),0,HEIGHT-82)
+        piso = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (WIDTH,82),0,HEIGHT-82)
 
-        plataforma_a = plataforma(self.slave,r"RECURSOS\piso_piedra.png", (300,50),0,260)
-        plataforma_b = plataforma(self.slave,r"RECURSOS\piso_piedra.png", (500,50),900,200)
-        plataforma_c = plataforma(self.slave,r"RECURSOS\piso_piedra.png", (300,50),0,450)
-        plataforma_d = plataforma(self.slave,r"RECURSOS\piso_piedra.png", (500,50),1070,500)
-        plataforma_e = plataforma(self.slave,r"RECURSOS\piso_piedra.png", (600,50),425,380)
-        plataforma_f = plataforma(self.slave,r"RECURSOS\piso_piedra.png", (400,52),364,574)
-        plataforma_g = plataforma(self.slave,r"RECURSOS\piso_piedra.png", (200,50),600,250)
-        plataforma_h = plataforma(self.slave,r"RECURSOS\piso_piedra.png", (75,50),450,200)
+        plataforma_a = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (300,50),0,260)
+        plataforma_b = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (500,50),900,200)
+        plataforma_c = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (300,50),0,450)
+        plataforma_d = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (500,50),1070,500)
+        plataforma_e = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (600,50),425,380)
+        plataforma_f = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (400,52),364,574)
+        plataforma_g = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (200,50),600,250)
+        plataforma_h = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (75,50),450,200)
 
         lista_plataformas = [piso, plataforma_a,plataforma_b,plataforma_c,plataforma_d,plataforma_e,plataforma_f,plataforma_g,plataforma_h]
 
@@ -66,7 +66,7 @@ class NivelUno(Nivel):
         ]
         enemigo_00_movimientos = [quieto_00,correr_00]
 
-        enemigo = Enemigo(self.slave, quieto_00[0],(60,90),900,300,enemigo_00_movimientos,990,430)
+        enemigo = Enemigo(self.pantalla, quieto_00[0],(60,90),900,300,enemigo_00_movimientos,990,430)
 
 
         # OMNITRIX 
@@ -77,8 +77,8 @@ class NivelUno(Nivel):
             pygame.transform.flip(omni,True,False),
             pygame.transform.flip(omni,True,False)
         ]
-        omnitrix_1 = Especial(80,220,self.slave,imagen_omnitrix)
-        omnitrix_2 = Especial(1120,460,self.slave,imagen_omnitrix)
+        omnitrix_1 = Especial(80,220,self.pantalla,imagen_omnitrix)
+        omnitrix_2 = Especial(1120,460,self.pantalla,imagen_omnitrix)
         omnitrix = [omnitrix_1,omnitrix_2]
 
         # CORAZON
@@ -89,7 +89,7 @@ class NivelUno(Nivel):
             pygame.transform.flip(cora,True,False),
             pygame.transform.flip(cora,True,False)
         ]
-        corazon = Especial(1100,150,self.slave,imagen_corazon)
+        corazon = Especial(1100,150,self.pantalla,imagen_corazon)
         corazones = [corazon]
         
-        super().__init__(self.slave, personaje_principal, lista_plataformas, img_fondo, enemigo, omnitrix, corazones)
+        super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigo, omnitrix, corazones)
