@@ -44,7 +44,7 @@ class Enemigo(Personaje):
     
     def disparar(self,slave):
         bala = Disparo(self.rect.x,self.rect.y,slave,r"RECURSOS\bola de fuego.png", self.posicion)
-        pygame.mixer.Sound(r"RECURSOS\boost_engine_01.wav").play().set_volume(0.5)
+        pygame.mixer.Sound(r"RECURSOS\disparo.wav").play().set_volume(0.5)
         self.lista_proyectiles.append(bala)
 
 

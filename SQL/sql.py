@@ -3,9 +3,34 @@ def crear_table(sentencia):
     with sqlite3.connect("SQL/puntajes.db") as conexion:
         try:
             conexion.execute(sentencia)
-            print('dfghjkl')
         except:
             print('Error!!!')
+
+def actualizar_nombre_tabla(nuevo_nombre):
+    conn = sqlite3.connect('SQL/puntajes.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''UPDATE Jugadores
+                    SET nombre = ? WHERE id = 1''', (nuevo_nombre,))
+    conn.commit()
+
+    # Cerrar la conexión a la base de datos
+    cursor.close()
+    conn.close()
+
+def actualizar_puntos_tabla(puntos):
+    conn = sqlite3.connect('SQL/puntajes.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''UPDATE Jugadores
+                    SET puntaje = ? WHERE id = 1''', (puntos,))
+    conn.commit()
+
+    # Cerrar la conexión a la base de datos
+    cursor.close()
+    conn.close()
+
+
 
 def sql_table(sentencia):
     with sqlite3.connect("SQL/puntajes.db") as conexion:
@@ -80,7 +105,7 @@ sentencia = '''
             puntaje integer
             )
             '''
-    #sql_table(sentencia)
+#crear_table(sentencia)
 sentencia_1 = '''
             insert into Jugadores(nombre,puntaje) values("pepe",20)
             '''

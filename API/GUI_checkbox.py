@@ -10,7 +10,7 @@ class CheckBox(Widget):
     Clase que representa un checkbox en una interfaz gráfica.
     Hereda de la clase Widget.
     """
-    def __init__(self, screen,master_x,master_y, x,y,w,h, path_image_on, path_image_off):
+    def __init__(self, screen,master_x,master_y, x,y,w,h, path_image_on, path_image_off,onclick, onclick_param):
         super().__init__(screen, x,y,w,h)
         """
         Inicializa una instancia de CheckBox.
@@ -43,6 +43,9 @@ class CheckBox(Widget):
         
         self.isclicked = False
         self.contador_click = 0
+
+        self._onclick = onclick
+        self._onclick_param = onclick_param
         
         self.render()
         
@@ -68,6 +71,7 @@ class CheckBox(Widget):
                     if self.slave_rect_collide.collidepoint(evento.pos):
                         self.esta_prendido = not self.esta_prendido
                         self.contador_click = 0
+                        self._onclick(self._onclick_param)
         else:
             self.contador_click += 1
         

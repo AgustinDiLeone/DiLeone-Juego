@@ -17,7 +17,7 @@ pygame.display.set_icon(icono)
 # FUENTE ##############################################################
 fuente = pygame.font.SysFont("Arco Font",70)
 cronometro = pygame.time.get_ticks
-form_prueba = FormPrueba(PANTALLA, 150, 150, 900,350,"blue","black", 5, True)
+form_prueba = FormPrueba(PANTALLA, 0, 0, PANTALLA.get_width(),PANTALLA.get_height())
 
 # BASE DE DATOS #######################################################
 sentencia_5 = '''
@@ -46,14 +46,8 @@ while True:
             
     form_prueba.update(lista_eventos)
     if form_prueba.ingreso_txt_box() != "" and form_prueba.ingreso_txt_box() != mensaje_antiguo:
-        print(form_prueba.ingreso_txt_box())
         mensaje_antiguo = form_prueba.ingreso_txt_box()
-        sentencia = f'''
-            update  Jugadores
-            set nombre = "{form_prueba.ingreso_txt_box()}"
-            where id = 1
-            '''
-        sql_table(sentencia)
+        actualizar_nombre_tabla(mensaje_antiguo)
 
 
     pygame.display.update()

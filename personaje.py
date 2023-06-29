@@ -126,7 +126,7 @@ class Personaje(pygame.sprite.Sprite):
     
     def disparar(self,slave):
         bala = Disparo(self.rect.x,self.rect.y,slave,r"RECURSOS\bola de fuego.png", self.posicion)
-        pygame.mixer.Sound(r"RECURSOS\boost_engine_01.wav").play()
+        pygame.mixer.Sound(r"RECURSOS\disparo.wav").play()
         self.lista_proyectiles.append(bala)
 
     def collision(self,personaje,omnitrix,corazones):
@@ -190,15 +190,12 @@ class Personaje(pygame.sprite.Sprite):
     
     
     def actualizar_puntos(self):
-        sentencia = f'''
-            update  Jugadores
-            set puntaje = {self.puntuacion}
-            where id = 1
-            '''
-        crear_table(sentencia)
+        actualizar_puntos_tabla(self.puntuacion)
         self.puntuacion_vieja = self.puntuacion
 
     def update(self, slave,lista_plataformas,enemigo,omnitrix,corazones):
+        if self.puntuacion != self.puntuacion_vieja:
+                self.actualizar_puntos()
         self.ganar(enemigo,omnitrix,corazones)
         if self.gano:
             pygame.mixer.Sound(r"RECURSOS\gano.wav").play()
@@ -206,8 +203,6 @@ class Personaje(pygame.sprite.Sprite):
             self.esta_vivo = False
         else:
             slave.blit(self.imagen, self.rect)
-            if self.puntuacion != self.puntuacion_vieja:
-                self.actualizar_puntos()
             self.aplicar_gravedad(lista_plataformas)
             self.collision(enemigo,omnitrix,corazones)
             for x in self.lista_proyectiles:

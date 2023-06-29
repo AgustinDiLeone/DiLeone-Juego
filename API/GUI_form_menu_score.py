@@ -18,7 +18,7 @@ class FormMenuScore(Form):
 
         self.magen_y = margen_y
 
-        self._btn_home = Button_Image(self._slave,x,y,w-70,h-70,50,50,"API\home.png",self.btn_home_click,"","","Verdana",15,"Green","red","blue")
+        self._btn_home = Button_Image(self._slave,x,y,w-70,h-70,50,50,r"RECURSOS\boton_settings.png",self.btn_home_click,"","","Verdana",15,"Green","red","blue")
 
         self.lista_widgets.append(self._btn_home)
         
@@ -36,7 +36,7 @@ class FormMenuScore(Form):
         personajes_puntos = '''
                     select nombre,puntaje
                     from Jugadores
-                    order by puntaje desc limit 1
+                    order by puntaje desc limit 4
                     '''
         self.score = sql_table(personajes_puntos)
         

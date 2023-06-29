@@ -83,10 +83,17 @@ class Nivel():
         pygame.draw.rect(self.slave, "black",info1 ,100)
 
         tiempo_transcurrido = time.time() - self.comienzo
-        tiempo = fuente.render(f"00:{int(60-tiempo_transcurrido)}", True, "White")
-        
+        if tiempo_transcurrido >= 60:
+            self.jugador.esta_vivo = False
+            self.jugador.vidas = 0
+            print("f")
+        else:
+            if tiempo_transcurrido > 50:
+                tiempo = fuente.render(f"00:0{int(60-tiempo_transcurrido)}", True, "White")
+            else:
+                tiempo = fuente.render(f"00:{int(60-tiempo_transcurrido)}", True, "White")
+            self.slave.blit(tiempo, (500,20))
         score = fuente.render(f"Score:{self.jugador.puntuacion}", True, "White")
-        self.slave.blit(tiempo, (500,20))
         self.slave.blit(score, (912,20))
         self.jugador.mostrar_vidas(self.slave)
 
