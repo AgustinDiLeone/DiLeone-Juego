@@ -24,7 +24,7 @@ class Especial(pygame.sprite.Sprite):
         self.escaler_imagen()
         self.accion += 1
 
-    def update(self):
+    def update(self,slave):
         if self.activo:
             self.animar()
-            self.pantalla.blit(self.imagen, self.rect)
+            slave.blit(self.imagen, self.rect)

@@ -1,6 +1,9 @@
 import pygame
 from  config import *
 from disparo import Disparo
+from API.GUI_form_prueba import *
+from SQL.sql import sql_table
+#from main import form_prueba
 #from main import *
 
 class Personaje(pygame.sprite.Sprite):
@@ -28,13 +31,20 @@ class Personaje(pygame.sprite.Sprite):
         self.contador_pasos = 0
         self.acciones = acciones
         self.esta_vivo = True
+        self.gano = False
         self.puntuacion = 0
+        self.puntuacion_vieja = 0
         self.vidas = 3
         self.corazon = pygame.transform.scale(pygame.image.load("RECURSOS\corazon.png"),(50,40))
         self.lista_proyectiles = []
         self.path_disparo = disparo
         self.retrazo_disparo = 1000
         self.ultimo_disparo = pygame.time.get_ticks()
+        self.nombre = "Jugador 1"
+        sentencia = f'''
+            insert into Jugadores(nombre,puntaje) values("{self.nombre}",{self.puntuacion})
+            '''
+        sql_table(sentencia)
 
         self.crear_rectangulos()
 
@@ -114,8 +124,9 @@ class Personaje(pygame.sprite.Sprite):
             else:
                 self.esta_saltando = True
     
-    def disparar(self):
-        bala = Disparo(self.rect.x,self.rect.y,self.pantalla,r"RECURSOS\bola de fuego.png", self.posicion)
+    def disparar(self,slave):
+        bala = Disparo(self.rect.x,self.rect.y,slave,r"RECURSOS\bola de fuego.png", self.posicion)
+        pygame.mixer.Sound(r"RECURSOS\boost_engine_01.wav").play()
         self.lista_proyectiles.append(bala)
 
     def collision(self,personaje,omnitrix,corazones):
@@ -131,6 +142,7 @@ class Personaje(pygame.sprite.Sprite):
                     self.vidas -= 1
                     self.muerte()
                     x.disparo_activo = False
+                    personaje.lista_proyectiles.remove(x)
             for x in self.lista_proyectiles:
                 if x.disparo_rect.colliderect(personaje.rect):
                     x.disparo_activo = False
@@ -138,33 +150,64 @@ class Personaje(pygame.sprite.Sprite):
                     self.puntuacion += 100
         for x in omnitrix:
             if x.activo and self.rect.colliderect(x.rect):
+                pygame.mixer.Sound(r"RECURSOS\agarrar.wav").play()
                 x.activo = False
                 self.puntuacion += 100
         for x in corazones:
             if x.activo and self.rect.colliderect(x.rect):
                 x.activo = False
+                pygame.mixer.Sound(r"RECURSOS\agarrar.wav").play()
                 self.puntuacion += 50
-                self.vidas += 1
+                if self.vidas < 3:
+                    self.vidas += 1
     
     def muerte(self):
         self.rect.x = self.master_x
         self.rect.y = self.master_y
         self.crear_rectangulos()
         self.posicion = "derecha"
+        pygame.mixer.Sound(r"RECURSOS\ruido_muerte.wav").play()
+    
+    def ganar(self,personaje,omnitrix,corazones):
+        flag = True
+        if not personaje.esta_vivo:
+            for x in omnitrix:
+                if x.activo:
+                    flag = False
+            for x in corazones:
+                if x.activo:
+                    flag = False
+            if flag:
+                self.gano = True
 
-    def mostrar_vidas(self):
+    def mostrar_vidas(self,pantalla):
         if self.vidas >= 1:
-            self.pantalla.blit(self.corazon,(100,20))
+            pantalla.blit(self.corazon,(100,20))
         if self.vidas >=2:
-            self.pantalla.blit(self.corazon,(150,20))
+            pantalla.blit(self.corazon,(150,20))
         if self.vidas >=3:
-            self.pantalla.blit(self.corazon,(200,20))
+            pantalla.blit(self.corazon,(200,20))
+    
+    
+    def actualizar_puntos(self):
+        sentencia = f'''
+            update  Jugadores
+            set puntaje = {self.puntuacion}
+            where id = 1
+            '''
+        crear_table(sentencia)
+        self.puntuacion_vieja = self.puntuacion
 
-    def update(self,lista_plataformas,enemigo,omnitrix,corazones):
-        if self.vidas == 0:
-            self.esta_vivo == False
+    def update(self, slave,lista_plataformas,enemigo,omnitrix,corazones):
+        self.ganar(enemigo,omnitrix,corazones)
+        if self.gano:
+            pygame.mixer.Sound(r"RECURSOS\gano.wav").play()
+        elif self.vidas <= 0:
+            self.esta_vivo = False
         else:
-            self.pantalla.blit(self.imagen, self.rect)
+            slave.blit(self.imagen, self.rect)
+            if self.puntuacion != self.puntuacion_vieja:
+                self.actualizar_puntos()
             self.aplicar_gravedad(lista_plataformas)
             self.collision(enemigo,omnitrix,corazones)
             for x in self.lista_proyectiles:
@@ -172,6 +215,7 @@ class Personaje(pygame.sprite.Sprite):
                 x.update()
                 if x.disparo_rect.left == WIDTH:
                     self.lista_proyectiles.remove(x)
+        
 
 
 

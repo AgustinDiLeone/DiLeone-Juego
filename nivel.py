@@ -18,6 +18,7 @@ class Nivel():
         self.omnitrix = omnitrix
         self.corazones = corazones
         self.comienzo = time.time()
+        
 
     def leer_inputs(self):
         keys = pygame.key.get_pressed()
@@ -41,7 +42,7 @@ class Nivel():
         if keys[pygame.K_p]:
             ahora = pygame.time.get_ticks()
             if ahora - self.jugador.ultimo_disparo > self.jugador.retrazo_disparo:
-                self.jugador.disparar()
+                self.jugador.disparar(self.slave)
                 self.jugador.ultimo_disparo = ahora
     
     def leer_eventos(self,lista_eventos):
@@ -62,14 +63,19 @@ class Nivel():
 
     def actualizar_pantalla(self):
         self.slave.blit(self.img_fondo, (0,0))
-        for platform in self.plataformas:
-            platform.update()
-        self.jugador.update(self.plataformas,self.enemigo,self.omnitrix,self.corazones)
-        self.enemigo.update()
+
+        for platform in self.plataformas: 
+            platform.update(self.slave)
+
+        self.jugador.update(self.slave,self.plataformas,self.enemigo,self.omnitrix,self.corazones)
+
+        self.enemigo.update(self.slave)
+
         for x in self.omnitrix:
-            x.update()
+            x.update(self.slave)
+    
         for x in self.corazones:
-            x.update()
+            x.update(self.slave)
         # FUENTE ##############################################################
         fuente = pygame.font.SysFont("Arco Font",70)
         # FORMULARIOS   #########################################################3
@@ -82,11 +88,25 @@ class Nivel():
         score = fuente.render(f"Score:{self.jugador.puntuacion}", True, "White")
         self.slave.blit(tiempo, (500,20))
         self.slave.blit(score, (912,20))
-        self.jugador.mostrar_vidas()
+        self.jugador.mostrar_vidas(self.slave)
 
     def update(self,lista_eventos):
-        self.leer_inputs()
-        self.leer_eventos(lista_eventos)
-        self.dibujar_rectangulos()
-        self.actualizar_pantalla()
+        if self.jugador.gano:
+            fuente = pygame.font.SysFont("Arco Font",70)
+            info1 = pygame.Rect(380,250,500,200)
+            pygame.draw.rect(self.slave, "red",info1 ,100)            
+            win = fuente.render(f"Has ganado :)", True, "black")
+            self.slave.blit(win, (470,320))
+        else:
+            if self.jugador.esta_vivo:
+                self.leer_inputs()
+                self.leer_eventos(lista_eventos)
+                self.actualizar_pantalla()
+                self.dibujar_rectangulos()
+            else:
+                fuente = pygame.font.SysFont("Arco Font",70)
+                info1 = pygame.Rect(380,250,500,200)
+                pygame.draw.rect(self.slave, "red",info1 ,100)            
+                lose = fuente.render(f"Has perdido :(", True, "black")
+                self.slave.blit(lose, (470,320))
 

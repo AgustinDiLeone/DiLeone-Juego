@@ -7,21 +7,21 @@ from API.GUI_contenedor_nivel import FormContenedorNivel
 from manejador_niveles import *
 
 class FormMenuPlay(Form):
-    def __init__(self, screen, x, y, w, h, color_background,path_image, color_border="Black", active=True, ):
+    def __init__(self, screen, x, y, w, h, color_background,path_image, color_border="Black", active=True):
         super().__init__(screen, x, y, w, h, color_background, color_border, active)
         self.manejador_niveles = Manejador_niveles(self._master)
         aux_image = pygame.image.load(path_image)
         aux_image = pygame.transform.scale(aux_image,(w,h))
         self._slave = aux_image
 
-        self.btn_level_1 = Button_Image(self._slave,x,y,100,100,100,150,"API\home.png",self.entrar_nivel,"nivel_uno")
-        self.btn_level_2 = Button_Image(self._slave,x,y,250,100,100,150,"API\home.png",self.entrar_nivel,"nivel_dos")
-        #self.btn_level_3 = Button_Image(self._slave,x,y,250,100,100,150,"API\home.png",self.entrar_nivel,"nivel_dos")
+        self.btn_level_1 = Button_Image(self._slave,x,y,60,100,200,180,r"RECURSOS\boton_uno.png",self.entrar_nivel,"nivel_uno")
+        self.btn_level_2 = Button_Image(self._slave,x,y,250,100,200,180,r"RECURSOS\boton_dos.png",self.entrar_nivel,"nivel_dos")
+        self.btn_level_3 = Button_Image(self._slave,x,y,60,300,200,180,r"RECURSOS\boton_tres.png",self.entrar_nivel,"nivel_tres")
         self.btn_home = Button_Image(self._slave,x,y,400,400,50,50,"API\home.png",self.btn_home_click,"")
         
         self.lista_widgets.append(self.btn_level_1)
         self.lista_widgets.append(self.btn_level_2)
-        #self.lista_widgets.append(self.btn_level_3)
+        self.lista_widgets.append(self.btn_level_3)
         self.lista_widgets.append(self.btn_home)
 
     def on(self, param):
@@ -36,7 +36,7 @@ class FormMenuPlay(Form):
             self.hijo.update(lista_eventos)
     
     def entrar_nivel(self,nombre_nivel):
-        nivel = self.manejador_niveles.get_niveles(nombre_nivel)
+        nivel = self.manejador_niveles.get_nivel(nombre_nivel)
         form_contenedor_nivel = FormContenedorNivel(self._master,nivel)
         self.show_dialog(form_contenedor_nivel)
 

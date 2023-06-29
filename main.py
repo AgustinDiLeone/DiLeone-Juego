@@ -1,8 +1,8 @@
 import sys
-from nivel_uno import NivelUno
-from nivel_dos import NivelDos
 from config import *
 from API.GUI_form_prueba import *
+from SQL.sql import sql_table, crear_table
+from modo import cambiar_modo
 
 pygame.init()
 
@@ -14,26 +14,46 @@ RELOJ = pygame.time.Clock()
 icono = pygame.image.load(r"RECURSOS\ben_parado.png")
 pygame.display.set_icon(icono)
 
-# MUSICA ############################################################3
-#pygame.mixer.music.load("RECURSOS\musica.mp3")
-#pygame.mixer.music.play(-1)
-#pygame.mixer.music.set_volume(0.1)
-
 # FUENTE ##############################################################
 fuente = pygame.font.SysFont("Arco Font",70)
 cronometro = pygame.time.get_ticks
+form_prueba = FormPrueba(PANTALLA, 150, 150, 900,350,"blue","black", 5, True)
 
-form_prueba = FormPrueba(PANTALLA, 150, 150, 900,350,"gold","black", 5, True)
+# BASE DE DATOS #######################################################
+sentencia_5 = '''
+            delete from  Jugadores
+            
+            '''
+crear_table(sentencia_5)
+
+sentencia_1 = '''
+            insert into Jugadores(id,nombre,puntaje) values(1,"Jugador 1",0)
+            '''
+crear_table(sentencia_1)
+
+mensaje_antiguo =""
 
 while True:
     RELOJ.tick(FPS)
-    PANTALLA.fill("green")
+    PANTALLA.fill("black")
     lista_eventos = pygame.event.get()
     for evento in lista_eventos:
         if evento.type == pygame.QUIT:
             pygame.quit()
             sys.exit(0)
-    
+        if evento.type == pygame.MOUSEBUTTONDOWN:
+            print(pygame.mouse.get_pos())
+            
     form_prueba.update(lista_eventos)
+    if form_prueba.ingreso_txt_box() != "" and form_prueba.ingreso_txt_box() != mensaje_antiguo:
+        print(form_prueba.ingreso_txt_box())
+        mensaje_antiguo = form_prueba.ingreso_txt_box()
+        sentencia = f'''
+            update  Jugadores
+            set nombre = "{form_prueba.ingreso_txt_box()}"
+            where id = 1
+            '''
+        sql_table(sentencia)
+
 
     pygame.display.update()

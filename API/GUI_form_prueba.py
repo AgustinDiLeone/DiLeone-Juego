@@ -18,6 +18,7 @@ class FormPrueba(Form):
 
         self.volumen = 0.2
         self.flag_play = True
+        self.mensaje_antiguo = ""
 
         pygame.mixer.init()
 
@@ -29,7 +30,7 @@ class FormPrueba(Form):
         self.label_volume = Label(self._slave,650,190,100,50,"20%","Comic Sans", 15,"white", "API\Table.png")
         self.slider_volumen = Slider(self._slave,x,y,100,200,500,15,self.volumen,"black","green")
         self.boton_tabla = Button_Image(self._slave,x,y,255,100,50,50,"API\Menu_BTN.png",self.btn_tabla_click,"fghj")
-        self.boton_jugar = Button_Image(self._slave,x,y,300,100,50,50,"RECURSOS\omnitrix.png",self.btn_jugar_click,"a")
+        self.boton_jugar = Button_Image(self._slave,x,y,320,100,75,50,r"RECURSOS\boton_play.png",self.btn_jugar_click,"a")
         #self.checkbox = CheckBox(self._slave,x,y,100,230,50,50,r"API\boton_on.png",r"API\home.png")
         #self.picture_box = PictureBox(self._slave,300,230,100,50,"API\home.png")
 
@@ -42,7 +43,7 @@ class FormPrueba(Form):
         self.lista_widgets.append(self.boton_jugar)
         #self.lista_widgets.append(self.checkbox)
         #self.lista_widgets.append(self.picture_box)
-        pygame.mixer.music.load("RECURSOS\musica.mp3")
+        pygame.mixer.music.load("RECURSOS\cancion_fondo.mp3")
         pygame.mixer.music.set_volume(self.volumen)
         pygame.mixer.music.play(-1)
 
@@ -58,6 +59,9 @@ class FormPrueba(Form):
                 self.update_volumen(lista_eventos)
         else:
             self.hijo.update(lista_eventos)
+
+    def ingreso_txt_box(self):
+        return self.textbox.get_text()
 
     def render(self):
         self._slave.fill(self._color_background)
@@ -86,7 +90,7 @@ class FormPrueba(Form):
         pygame.mixer.music.set_volume(self.volumen)
 
     def btn_tabla_click(self,texto):
-        form_puntaje = FormMenuScore(self._master,340,120,500,550,"Green","White",True,"API\Window.png",
+        form_puntaje = FormMenuScore(self._master,340,80,500,550,"Green","White",True,"API\Window.png",
                                     "dic_score",100,10,10)
 
         self.show_dialog(form_puntaje)

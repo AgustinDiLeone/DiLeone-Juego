@@ -1,4 +1,11 @@
 import sqlite3
+def crear_table(sentencia):
+    with sqlite3.connect("SQL/puntajes.db") as conexion:
+        try:
+            conexion.execute(sentencia)
+            print('dfghjkl')
+        except:
+            print('Error!!!')
 
 def sql_table(sentencia):
     with sqlite3.connect("SQL/puntajes.db") as conexion:
@@ -7,28 +14,37 @@ def sql_table(sentencia):
             lista_nombre_puntos = []
             for fila in cursor:
                 lista_nombre_puntos.append(fila)
+            print('listpoooo')
             return lista_nombre_puntos 
+
         except:
             print('Error!!!')
+
+# BORRAR TABLA ##############################################
+sentencia_5 = '''
+            delete from  Jugadores
+            
+            '''
+#crear_table(sentencia_5)
 
 sentencia = '''
             create table Jugadores
             (
-            id integer primary key autoincrement,
+            id integer,
             nombre text,
             puntaje integer
             )
             '''
-#sql_table(sentencia)
+#crear_table(sentencia)
 
 sentencia_2 = '''
             insert into Jugadores(nombre,puntaje) values("pepe",20)
             '''
 #sql_table(sentencia_2)
 sentencia_2 = '''
-            insert into Jugadores(nombre,puntaje) values("dfg",200558)
+            insert into Jugadores(id) values(1)
             '''
-#sql_table(sentencia_2)
+#crear_table(sentencia_2)
 
 sentencia_3 = '''
             select nombre,puntaje
@@ -49,6 +65,7 @@ sentencia_4 = '''
             '''
 #sql_table(sentencia_4)
 
+# BORRAR TABLA ##############################################
 sentencia_5 = '''
             delete from  Jugadores
             

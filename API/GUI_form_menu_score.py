@@ -36,7 +36,7 @@ class FormMenuScore(Form):
         personajes_puntos = '''
                     select nombre,puntaje
                     from Jugadores
-                    order by puntaje desc limit 3
+                    order by puntaje desc limit 1
                     '''
         self.score = sql_table(personajes_puntos)
         
