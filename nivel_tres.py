@@ -9,18 +9,14 @@ class NivelTres(Nivel):
     def __init__(self, pantalla) -> None:
         self.pantalla = pantalla
         # FONDO ############################################
-        img_fondo = pygame.image.load(r"RECURSOS\fondo_ben.jpg")
+        img_fondo = pygame.image.load(r"RECURSOS\fondo_3.jpg")
         img_fondo = pygame.transform.scale(img_fondo, SIZE_SCREEN)
 
         # ICONO  ###############################################################3
         icono = pygame.image.load(r"RECURSOS\ben_parado.png")
         pygame.display.set_icon(icono)
 
-        # MUSICA ############################################################3
-        #pygame.mixer.music.load("RECURSOS\musica.mp3")
-        #pygame.mixer.music.play(-1)
-        #pygame.mixer.music.set_volume(0.1)
-
+        
         # BEN    #################################################################
         correr = [
             pygame.image.load(r"RECURSOS\ben_correr.png"),
@@ -41,18 +37,17 @@ class NivelTres(Nivel):
 
         # PLATAFORMA   ########################################################
 
-        piso = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (WIDTH,82),0,HEIGHT-82)
+        piso = plataforma(pantalla,r"RECURSOS\piso_tierra.png", (WIDTH,82),0,HEIGHT-82)
 
-        plataforma_a = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (300,50),0,260)
-        plataforma_b = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (500,50),900,200)
-        plataforma_c = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (300,50),0,450)
-        plataforma_d = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (500,50),1070,500)
-        plataforma_e = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (600,50),425,380)
-        plataforma_f = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (400,52),364,574)
-        plataforma_g = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (200,50),600,250)
-        plataforma_h = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (75,50),450,200)
+        plataforma_a = plataforma(pantalla,r"RECURSOS\piso_tierra.png", (300,50),0,280)
+        plataforma_b = plataforma(pantalla,r"RECURSOS\piso_tierra.png", (500,50),900,200)
+        plataforma_c = plataforma(pantalla,r"RECURSOS\piso_tierra.png", (200,50),0,450)
+        plataforma_d = plataforma(pantalla,r"RECURSOS\piso_tierra.png", (500,50),1070,500)
+        plataforma_e = plataforma(pantalla,r"RECURSOS\piso_tierra.png", (720,50),310,405)
+        plataforma_f = plataforma(pantalla,r"RECURSOS\piso_tierra.png", (400,52),364,574)
+        plataforma_g = plataforma(pantalla,r"RECURSOS\piso_tierra.png", (500,50),400,250)
 
-        lista_plataformas = [piso, plataforma_a,plataforma_b,plataforma_c,plataforma_d,plataforma_e,plataforma_f,plataforma_g,plataforma_h]
+        lista_plataformas = [piso, plataforma_a,plataforma_b,plataforma_c,plataforma_d,plataforma_e,plataforma_f,plataforma_g]
 
         # ENEMIGOS #############################################################
 
@@ -67,7 +62,7 @@ class NivelTres(Nivel):
         ]
         enemigo_00_movimientos = [quieto_00,correr_00]
 
-        enemigo = Enemigo(pantalla, quieto_00[0],(60,90),900,300,enemigo_00_movimientos,990,430,3)
+        enemigo = Enemigo(pantalla, quieto_00[0],(60,90),590,170,enemigo_00_movimientos,830,400,3)
 
 
         # OMNITRIX 
@@ -78,8 +73,8 @@ class NivelTres(Nivel):
             pygame.transform.flip(omni,True,False),
             pygame.transform.flip(omni,True,False)
         ]
-        omnitrix_1 = Especial(80,220,pantalla,imagen_omnitrix)
-        omnitrix_2 = Especial(1120,460,pantalla,imagen_omnitrix)
+        omnitrix_1 = Especial(80,235,pantalla,imagen_omnitrix)
+        omnitrix_2 = Especial(48,420,pantalla,imagen_omnitrix)
         omnitrix = [omnitrix_1,omnitrix_2]
 
         # CORAZON
@@ -101,7 +96,7 @@ class NivelTres(Nivel):
             pygame.image.load("RECURSOS\sprite_veneno3.png"),
             pygame.image.load("RECURSOS\sprite_veneno4.png")
         ]
-        veneno = Especial(1100,400,self.pantalla,imagen_veneno)
+        veneno = Especial(1100,420,self.pantalla,imagen_veneno)
         venenos = [veneno]
 
         # SIERRA
@@ -109,7 +104,7 @@ class NivelTres(Nivel):
                 pygame.image.load("RECURSOS\sprite_sierra_2.png")]
 
 
-        sierra_1 = Slider(900,150,self.pantalla,sierra,1000,500)
+        sierra_1 = Slider(900,390,self.pantalla,sierra,990,310)
         sierras = [sierra_1]
         
         super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigo, omnitrix, corazones,sierras,venenos)
