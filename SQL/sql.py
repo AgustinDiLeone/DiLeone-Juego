@@ -39,7 +39,6 @@ def sql_table(sentencia):
             lista_nombre_puntos = []
             for fila in cursor:
                 lista_nombre_puntos.append(fila)
-            print('listpoooo')
             return lista_nombre_puntos 
 
         except:

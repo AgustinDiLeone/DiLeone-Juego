@@ -7,7 +7,7 @@ from config import *
 class NivelUno(Nivel):
     def __init__(self, pantalla) -> None:
         # FONDO ############################################
-        img_fondo = pygame.image.load(r"RECURSOS\fondo_ben.jpg")
+        img_fondo = pygame.image.load(r"RECURSOS\fondo_0.jpg")
         img_fondo = pygame.transform.scale(img_fondo, SIZE_SCREEN)
 
         # ICONO  ###############################################################3
@@ -39,16 +39,16 @@ class NivelUno(Nivel):
 
         # PLATAFORMA   ########################################################
 
-        piso = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (WIDTH,82),0,HEIGHT-82)
+        piso = plataforma(pantalla,r"RECURSOS\piso_pasto.png", (WIDTH,82),0,HEIGHT-82)
 
-        plataforma_a = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (300,50),0,260)
-        plataforma_b = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (500,50),900,200)
-        plataforma_c = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (300,50),0,450)
-        plataforma_d = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (500,50),1070,500)
-        plataforma_e = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (600,50),425,380)
-        plataforma_f = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (400,52),364,574)
-        plataforma_g = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (200,50),600,250)
-        plataforma_h = plataforma(pantalla,r"RECURSOS\piso_piedra.png", (75,50),450,200)
+        plataforma_a = plataforma(pantalla,r"RECURSOS\piso_pasto.png", (300,50),0,260)
+        plataforma_b = plataforma(pantalla,r"RECURSOS\piso_pasto.png", (500,50),900,200)
+        plataforma_c = plataforma(pantalla,r"RECURSOS\piso_pasto.png", (300,50),0,450)
+        plataforma_d = plataforma(pantalla,r"RECURSOS\piso_pasto.png", (500,50),1070,500)
+        plataforma_e = plataforma(pantalla,r"RECURSOS\piso_pasto.png", (600,50),425,380)
+        plataforma_f = plataforma(pantalla,r"RECURSOS\piso_pasto.png", (400,52),364,574)
+        plataforma_g = plataforma(pantalla,r"RECURSOS\piso_pasto.png", (200,50),600,250)
+        plataforma_h = plataforma(pantalla,r"RECURSOS\piso_pasto.png", (75,50),450,200)
 
         lista_plataformas = [piso, plataforma_a,plataforma_b,plataforma_c,plataforma_d,plataforma_e,plataforma_f,plataforma_g,plataforma_h]
 

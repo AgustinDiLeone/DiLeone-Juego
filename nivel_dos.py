@@ -9,7 +9,7 @@ class NivelDos(Nivel):
     def __init__(self, pantalla) -> None:
         self.pantalla = pantalla
         # FONDO ############################################
-        img_fondo = pygame.image.load(r"RECURSOS\fondo_1.jpg")
+        img_fondo = pygame.image.load(r"RECURSOS\fondo_2.jpg")
         img_fondo = pygame.transform.scale(img_fondo, SIZE_SCREEN)
 
         # ICONO  ###############################################################3
@@ -36,18 +36,16 @@ class NivelDos(Nivel):
 
         # PLATAFORMA   ########################################################
 
-        piso = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (WIDTH,82),0,HEIGHT-82)
+        piso = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (WIDTH,82),0,HEIGHT-82)
 
-        plataforma_a = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (300,50),0,260)
-        plataforma_b = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (500,50),900,200)
-        plataforma_c = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (300,50),0,450)
-        plataforma_d = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (500,50),1070,500)
-        plataforma_e = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (600,50),425,380)
-        plataforma_f = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (400,52),364,574)
-        plataforma_g = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (200,50),600,250)
-        plataforma_h = plataforma(self.pantalla,r"RECURSOS\piso_piedra.png", (75,50),450,200)
+        plataforma_a = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (400,50),0,260)
+        plataforma_b = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (700,50),260,430)
+        plataforma_c = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (700,50),1040,540)
+        plataforma_d = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (260,50),480,315)
+        plataforma_e = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (200,50),780,245)
+        plataforma_f = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (200,50),1000,200)
 
-        lista_plataformas = [piso, plataforma_a,plataforma_b,plataforma_c,plataforma_d,plataforma_e,plataforma_f,plataforma_g,plataforma_h]
+        lista_plataformas = [piso, plataforma_a,plataforma_b,plataforma_c,plataforma_d,plataforma_e,plataforma_f]
 
         # ENEMIGOS #############################################################
 
@@ -62,7 +60,7 @@ class NivelDos(Nivel):
         ]
         enemigo_00_movimientos = [quieto_00,correr_00]
 
-        enemigo = Enemigo(self.pantalla, quieto_00[0],(60,90),900,300,enemigo_00_movimientos,990,430)
+        enemigo = Enemigo(self.pantalla, quieto_00[0],(60,90),530,380,enemigo_00_movimientos,900,260)
 
 
         # OMNITRIX 
@@ -95,15 +93,14 @@ class NivelDos(Nivel):
             pygame.image.load("RECURSOS\sprite_veneno3.png"),
             pygame.image.load("RECURSOS\sprite_veneno4.png")
         ]
-        veneno = Especial(1100,400,self.pantalla,imagen_veneno)
-        venenos = [veneno]
+        veneno = Especial(860,190,self.pantalla,imagen_veneno)
+        veneno_2 = Especial(577,260,self.pantalla,imagen_veneno)
+        venenos = [veneno,veneno_2]
 
         # SIERRA
         sierra = [pygame.image.load("RECURSOS\sprite_sierra.png"),
                 pygame.image.load("RECURSOS\sprite_sierra_2.png")]
-
-
-        sierra_1 = Slider(900,150,self.pantalla,sierra,1000,500)
+        sierra_1 = Slider(0,240,self.pantalla,sierra,350,0)
         sierras = [sierra_1]
         
         super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigo, omnitrix, corazones,sierras,venenos)

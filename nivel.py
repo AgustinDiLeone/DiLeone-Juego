@@ -93,7 +93,6 @@ class Nivel():
         if tiempo_transcurrido >= 60:
             self.jugador.esta_vivo = False
             self.jugador.vidas = 0
-            print("f")
         else:
             if tiempo_transcurrido > 50:
                 tiempo = fuente.render(f"00:0{int(60-tiempo_transcurrido)}", True, "White")
