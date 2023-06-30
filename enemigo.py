@@ -4,14 +4,16 @@ from disparo import Disparo
 from config import *
 
 class Enemigo(Personaje):
-    def __init__(self, pantalla, imagen, size: tuple, x, y,acciones,limite_mayor, limite_menor) -> None:
+    def __init__(self, pantalla, imagen, size: tuple, x, y,acciones,limite_mayor, limite_menor, vidas=1) -> None:
         super().__init__(pantalla, imagen, size, x, y, 10, 0, acciones)
         self.limite_mayor = limite_mayor
         self.limite_menor = limite_menor
         self.retrazo = 1000
         self.ultimo_disparo = pygame.time.get_ticks()
         self.ultima_direccion = pygame.time.get_ticks()
+        self.esta_vivo = True
         self.muerte_1 = False
+        self.vidas = vidas
 
     def direccion(self):
         if self.rect.x >= self.limite_mayor:
@@ -39,7 +41,7 @@ class Enemigo(Personaje):
     def collision(self,personaje):
         for x in personaje.lista_proyectiles:
             if x.disparo_rect.colliderect(self.rect):
-                self.esta_vivo = False
+                self.vidas -= 1
                 personaje.lista_proyectiles.remove(x)
     
     def disparar(self,slave):
@@ -47,8 +49,12 @@ class Enemigo(Personaje):
         pygame.mixer.Sound(r"RECURSOS\disparo.wav").play().set_volume(0.5)
         self.lista_proyectiles.append(bala)
 
+    def muerte(self):
+        if self.vidas <= 0:
+            self.esta_vivo = False
 
     def update(self,slave):
+        self.muerte()
         if self.esta_vivo == True:
             ahora = pygame.time.get_ticks()
             if ahora - self.ultimo_disparo > (self.retrazo * 2):

@@ -2,10 +2,12 @@ import pygame
 from pygame.locals import *
 from nivel import *
 from config import *
+from slider import *
 
 
 class NivelTres(Nivel):
     def __init__(self, pantalla) -> None:
+        self.pantalla = pantalla
         # FONDO ############################################
         img_fondo = pygame.image.load(r"RECURSOS\fondo_ben.jpg")
         img_fondo = pygame.transform.scale(img_fondo, SIZE_SCREEN)
@@ -65,7 +67,7 @@ class NivelTres(Nivel):
         ]
         enemigo_00_movimientos = [quieto_00,correr_00]
 
-        enemigo = Enemigo(pantalla, quieto_00[0],(60,90),900,300,enemigo_00_movimientos,990,430)
+        enemigo = Enemigo(pantalla, quieto_00[0],(60,90),900,300,enemigo_00_movimientos,990,430,3)
 
 
         # OMNITRIX 
@@ -90,5 +92,24 @@ class NivelTres(Nivel):
         ]
         corazon = Especial(1100,150,pantalla,imagen_corazon)
         corazones = [corazon]
+    
         
-        super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigo, omnitrix, corazones)
+        # VENENO
+        imagen_veneno = [
+            pygame.image.load("RECURSOS\sprite_veneno.png"),
+            pygame.image.load("RECURSOS\sprite_veneno2.png"),
+            pygame.image.load("RECURSOS\sprite_veneno3.png"),
+            pygame.image.load("RECURSOS\sprite_veneno4.png")
+        ]
+        veneno = Especial(1100,400,self.pantalla,imagen_veneno)
+        venenos = [veneno]
+
+        # SIERRA
+        sierra = [pygame.image.load("RECURSOS\sprite_sierra.png"),
+                pygame.image.load("RECURSOS\sprite_sierra_2.png")]
+
+
+        sierra_1 = Slider(900,150,self.pantalla,sierra,1000,500)
+        sierras = [sierra_1]
+        
+        super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigo, omnitrix, corazones,sierras,venenos)

@@ -105,6 +105,7 @@ class Personaje(pygame.sprite.Sprite):
     def saltar(self):
         if not self.esta_saltando:
             self.esta_saltando = True
+            pygame.mixer.Sound("RECURSOS\sonido_salto.mp3").play()
             self.desplazamiento_y = self.potencia_salto 
             self.animar_personaje(self.acciones[2])
             if self.posicion == "izquierda":
@@ -129,10 +130,10 @@ class Personaje(pygame.sprite.Sprite):
         pygame.mixer.Sound(r"RECURSOS\disparo.wav").play()
         self.lista_proyectiles.append(bala)
 
-    def collision(self,personaje,omnitrix,corazones):
+    def collision(self,personaje,omnitrix,corazones,sierra,veneno):
         if personaje.esta_vivo:
             if self.rect_bottom.colliderect(personaje.rect_top):
-                personaje.esta_vivo = False
+                personaje.vidas -= 1
                 self.puntuacion += 200
             elif self.rect.colliderect(personaje.rect):
                 self.vidas -= 1
@@ -146,7 +147,8 @@ class Personaje(pygame.sprite.Sprite):
             for x in self.lista_proyectiles:
                 if x.disparo_rect.colliderect(personaje.rect):
                     x.disparo_activo = False
-                    personaje.esta_vivo = False
+                    self.lista_proyectiles.remove(x)
+                    personaje.vidas -= 1
                     self.puntuacion += 100
         for x in omnitrix:
             if x.activo and self.rect.colliderect(x.rect):
@@ -160,6 +162,24 @@ class Personaje(pygame.sprite.Sprite):
                 self.puntuacion += 50
                 if self.vidas < 3:
                     self.vidas += 1
+        for x in sierra:
+            if x.activo and self.rect.colliderect(x.rect):
+                pygame.mixer.Sound(r"RECURSOS\disparo.wav").play()
+                self.muerte()
+                self.puntuacion -= 50
+                self.vidas -= 1
+        for x in veneno:
+            if x.activo and self.rect.colliderect(x.rect):
+                pygame.mixer.Sound(r"RECURSOS\disparo.wav").play()
+                x.activo = False
+                self.muerte()
+                self.puntuacion -= 100
+                self.vidas -= 1
+    
+    def verificar_muerte(self):
+        if self.vidas <= 0:
+            self.esta_vivo = False
+            self.muerte()
     
     def muerte(self):
         self.rect.x = self.master_x
@@ -188,29 +208,28 @@ class Personaje(pygame.sprite.Sprite):
         if self.vidas >=3:
             pantalla.blit(self.corazon,(200,20))
     
-    
     def actualizar_puntos(self):
         actualizar_puntos_tabla(self.puntuacion)
         self.puntuacion_vieja = self.puntuacion
 
-    def update(self, slave,lista_plataformas,enemigo,omnitrix,corazones):
+    def update(self, slave,lista_plataformas,enemigo,omnitrix,corazones,sierra,veneno):
         if self.puntuacion != self.puntuacion_vieja:
-                self.actualizar_puntos()
+            self.actualizar_puntos()
+        self.verificar_muerte()
         self.ganar(enemigo,omnitrix,corazones)
         if self.gano:
             pygame.mixer.Sound(r"RECURSOS\gano.wav").play()
-        elif self.vidas <= 0:
-            self.esta_vivo = False
-        else:
+        if self.esta_vivo:
             slave.blit(self.imagen, self.rect)
             self.aplicar_gravedad(lista_plataformas)
-            self.collision(enemigo,omnitrix,corazones)
+            self.collision(enemigo,omnitrix,corazones,sierra,veneno)
             for x in self.lista_proyectiles:
                 x.trayectoria()
                 x.update()
                 if x.disparo_rect.left == WIDTH:
                     self.lista_proyectiles.remove(x)
-        
+        else:
+            pygame.mixer.Sound(r"RECURSOS\ruido_lose.mp3").play()
 
 
 

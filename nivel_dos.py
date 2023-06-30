@@ -2,23 +2,19 @@ import pygame
 from pygame.locals import *
 from nivel import *
 from config import *
+from slider import *
 
 
 class NivelDos(Nivel):
     def __init__(self, pantalla) -> None:
         self.pantalla = pantalla
         # FONDO ############################################
-        img_fondo = pygame.image.load(r"RECURSOS\fondo_ben.jpg")
+        img_fondo = pygame.image.load(r"RECURSOS\fondo_1.jpg")
         img_fondo = pygame.transform.scale(img_fondo, SIZE_SCREEN)
 
         # ICONO  ###############################################################3
         icono = pygame.image.load(r"RECURSOS\ben_parado.png")
         pygame.display.set_icon(icono)
-
-        # MUSICA ############################################################3
-        #pygame.mixer.music.load("RECURSOS\musica.mp3")
-        #pygame.mixer.music.play(-1)
-        #pygame.mixer.music.set_volume(0.1)
 
         # BEN    #################################################################
         correr = [
@@ -56,13 +52,13 @@ class NivelDos(Nivel):
         # ENEMIGOS #############################################################
 
         correr_00 = [
-            pygame.image.load(r"RECURSOS\enemigo_01.png"),
-            pygame.image.load(r"RECURSOS\enemigo_02.png"),
-            pygame.image.load(r"RECURSOS\enemigo_03.png"),
-            pygame.image.load(r"RECURSOS\enemigo_04.png"),
+            pygame.image.load(r"RECURSOS\enemigo_10.png"),
+            pygame.image.load(r"RECURSOS\enemigo_11.png"),
+            pygame.image.load(r"RECURSOS\enemigo_12.png"),
+            pygame.image.load(r"RECURSOS\enemigo_13.png"),
         ]
         quieto_00 = [
-            pygame.image.load(r"RECURSOS\enemigo_00.png")
+            pygame.image.load(r"RECURSOS\enemigo_10.png")
         ]
         enemigo_00_movimientos = [quieto_00,correr_00]
 
@@ -91,5 +87,23 @@ class NivelDos(Nivel):
         ]
         corazon = Especial(1100,150,self.pantalla,imagen_corazon)
         corazones = [corazon]
+
+        # VENENO
+        imagen_veneno = [
+            pygame.image.load("RECURSOS\sprite_veneno.png"),
+            pygame.image.load("RECURSOS\sprite_veneno2.png"),
+            pygame.image.load("RECURSOS\sprite_veneno3.png"),
+            pygame.image.load("RECURSOS\sprite_veneno4.png")
+        ]
+        veneno = Especial(1100,400,self.pantalla,imagen_veneno)
+        venenos = [veneno]
+
+        # SIERRA
+        sierra = [pygame.image.load("RECURSOS\sprite_sierra.png"),
+                pygame.image.load("RECURSOS\sprite_sierra_2.png")]
+
+
+        sierra_1 = Slider(900,150,self.pantalla,sierra,1000,500)
+        sierras = [sierra_1]
         
-        super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigo, omnitrix, corazones)
+        super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigo, omnitrix, corazones,sierras,venenos)

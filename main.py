@@ -2,7 +2,6 @@ import sys
 from config import *
 from API.GUI_form_prueba import *
 from SQL.sql import sql_table, crear_table
-from modo import cambiar_modo
 
 pygame.init()
 
@@ -48,6 +47,5 @@ while True:
     if form_prueba.ingreso_txt_box() != "" and form_prueba.ingreso_txt_box() != mensaje_antiguo:
         mensaje_antiguo = form_prueba.ingreso_txt_box()
         actualizar_nombre_tabla(mensaje_antiguo)
-
 
     pygame.display.update()

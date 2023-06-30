@@ -4,12 +4,11 @@ from config import *
 from personaje import Personaje
 from enemigo import Enemigo
 from especiales import Especial
-
 from plataformas import plataforma
-#from API.GUI_form_prueba import *
+
 
 class Nivel():
-    def __init__(self,pantalla,personaje_principal,lista_plataformas,imagen_fondo,enemigo,omnitrix,corazones) -> None:
+    def __init__(self,pantalla,personaje_principal,lista_plataformas,imagen_fondo,enemigo,omnitrix,corazones,sierra,veneno) -> None:
         self.slave = pantalla
         self.jugador = personaje_principal
         self.plataformas = lista_plataformas
@@ -17,6 +16,8 @@ class Nivel():
         self.enemigo = enemigo
         self.omnitrix = omnitrix
         self.corazones = corazones
+        self.sierra = sierra
+        self.veneno = veneno
         self.comienzo = time.time()
         
 
@@ -67,7 +68,7 @@ class Nivel():
         for platform in self.plataformas: 
             platform.update(self.slave)
 
-        self.jugador.update(self.slave,self.plataformas,self.enemigo,self.omnitrix,self.corazones)
+        self.jugador.update(self.slave,self.plataformas,self.enemigo,self.omnitrix,self.corazones,self.sierra,self.veneno)
 
         self.enemigo.update(self.slave)
 
@@ -75,6 +76,12 @@ class Nivel():
             x.update(self.slave)
     
         for x in self.corazones:
+            x.update(self.slave)
+
+        for x in self.veneno:
+            x.update(self.slave)
+        
+        for x in self.sierra:
             x.update(self.slave)
         # FUENTE ##############################################################
         fuente = pygame.font.SysFont("Arco Font",70)
@@ -99,11 +106,9 @@ class Nivel():
 
     def update(self,lista_eventos):
         if self.jugador.gano:
-            fuente = pygame.font.SysFont("Arco Font",70)
-            info1 = pygame.Rect(380,250,500,200)
-            pygame.draw.rect(self.slave, "red",info1 ,100)            
-            win = fuente.render(f"Has ganado :)", True, "black")
-            self.slave.blit(win, (470,320))
+            win = pygame.image.load(r"RECURSOS\fondo_gano.png")
+            win = pygame.transform.scale(win,(WIDTH,HEIGHT))
+            self.slave.blit(win, (0,0))
         else:
             if self.jugador.esta_vivo:
                 self.leer_inputs()
@@ -111,9 +116,7 @@ class Nivel():
                 self.actualizar_pantalla()
                 self.dibujar_rectangulos()
             else:
-                fuente = pygame.font.SysFont("Arco Font",70)
-                info1 = pygame.Rect(380,250,500,200)
-                pygame.draw.rect(self.slave, "red",info1 ,100)            
-                lose = fuente.render(f"Has perdido :(", True, "black")
-                self.slave.blit(lose, (470,320))
+                lose = pygame.image.load(r"RECURSOS\fondo_lose.png")
+                lose = pygame.transform.scale(lose,(WIDTH,HEIGHT))
+                self.slave.blit(lose, (0,0))
 

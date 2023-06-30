@@ -55,13 +55,11 @@ class NivelUno(Nivel):
         # ENEMIGOS #############################################################
 
         correr_00 = [
-            pygame.image.load(r"RECURSOS\enemigo_01.png"),
-            pygame.image.load(r"RECURSOS\enemigo_02.png"),
-            pygame.image.load(r"RECURSOS\enemigo_03.png"),
-            pygame.image.load(r"RECURSOS\enemigo_04.png"),
+            pygame.image.load(r"RECURSOS\enemigo_20.png"),
+            pygame.image.load(r"RECURSOS\enemigo_21.png")
         ]
         quieto_00 = [
-            pygame.image.load(r"RECURSOS\enemigo_00.png")
+            pygame.image.load(r"RECURSOS\enemigo_20.png")
         ]
         enemigo_00_movimientos = [quieto_00,correr_00]
 
@@ -90,5 +88,9 @@ class NivelUno(Nivel):
         ]
         corazon = Especial(1100,150,pantalla,imagen_corazon)
         corazones = [corazon]
+        # Sierra 
+        sierra = []
+        # Veneno 
+        veneno = []
         
-        super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigo, omnitrix, corazones)
+        super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigo, omnitrix, corazones,sierra,veneno)
