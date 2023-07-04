@@ -56,7 +56,10 @@ class FormPrueba(Form):
                 self.draw()
                 self.render()
                 for widgets in self.lista_widgets:
-                    widgets.update(lista_eventos)
+                    try:
+                        widgets.update(lista_eventos)
+                    except:
+                        print("Error en el funcionamiento del juego")
         else:
             self.hijo.update(lista_eventos)
 

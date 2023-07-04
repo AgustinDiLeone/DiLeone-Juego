@@ -18,7 +18,10 @@ class FormContenedorNivel(Form):
     def update(self, lista_eventos):
         self.nivel.update(lista_eventos)
         for x in self.lista_widgets:
-            x.update(lista_eventos)
+            try:
+                x.update(lista_eventos)
+            except:
+                print("Error en el selector de niveles del juego")
         self.draw()
     
 

@@ -1,120 +1,76 @@
 import sqlite3
-def crear_table(sentencia):
-    with sqlite3.connect("SQL/puntajes.db") as conexion:
+def crear_tabla():
+    with sqlite3.connect("SQL/personaje.db") as conexion:
         try:
-            conexion.execute(sentencia)
-        except:
-            print('Error!!!')
-
-def actualizar_nombre_tabla(nuevo_nombre):
-    conn = sqlite3.connect('SQL/puntajes.db')
-    cursor = conn.cursor()
-
-    cursor.execute('''UPDATE Jugadores
-                    SET nombre = ? WHERE id = 1''', (nuevo_nombre,))
-    conn.commit()
-
-    # Cerrar la conexión a la base de datos
-    cursor.close()
-    conn.close()
-
-def actualizar_puntos_tabla(puntos):
-    conn = sqlite3.connect('SQL/puntajes.db')
-    cursor = conn.cursor()
-
-    cursor.execute('''UPDATE Jugadores
-                    SET puntaje = ? WHERE id = 1''', (puntos,))
-    conn.commit()
-
-    # Cerrar la conexión a la base de datos
-    cursor.close()
-    conn.close()
-
-
-
-def sql_table(sentencia):
-    with sqlite3.connect("SQL/puntajes.db") as conexion:
-        try:
-            cursor = conexion.execute(sentencia)
-            lista_nombre_puntos = []
-            for fila in cursor:
-                lista_nombre_puntos.append(fila)
-            return lista_nombre_puntos 
-
-        except:
-            print('Error!!!')
-
-# BORRAR TABLA ##############################################
-sentencia_5 = '''
-            delete from  Jugadores
-            
-            '''
-#crear_table(sentencia_5)
-
-sentencia = '''
-            create table Jugadores
-            (
-            id integer,
-            nombre text,
-            puntaje integer
-            )
-            '''
-#crear_table(sentencia)
-
-sentencia_2 = '''
-            insert into Jugadores(nombre,puntaje) values("pepe",20)
-            '''
-#sql_table(sentencia_2)
-sentencia_2 = '''
-            insert into Jugadores(id) values(1)
-            '''
-#crear_table(sentencia_2)
-
-sentencia_3 = '''
-            select nombre,puntaje
-            from Jugadores
-            order by puntaje desc limit 2
-            '''
-#print(sql_table(sentencia_3))
-sentencia_3 = '''
-            select nombre, puntaje
-            from Jugadores
-            '''
-#print(sql_table(sentencia_3))
-
-sentencia_4 = '''
-            update  Jugadores
-            set puntaje = 98745
-            where nombre = "Juan"
-            '''
-#sql_table(sentencia_4)
-
-# BORRAR TABLA ##############################################
-sentencia_5 = '''
-            delete from  Jugadores
-            
-            '''
-#sql_table(sentencia_5)
-
-sentencia = '''
-            create table Jugadores
+            sentencia = ''' create table personajes
             (
             id integer primary key autoincrement,
             nombre text,
             puntaje integer
             )
             '''
-#crear_table(sentencia)
-sentencia_1 = '''
-            insert into Jugadores(nombre,puntaje) values("pepe",20)
-            '''
-#sql_table(sentencia_1)
-sentencia_2 = '''
-                    insert into Jugadores(nombre,puntaje) values("jhthgchc",798858548)
-                    '''
-#sql_table(sentencia_2)
-sentencia_3 = '''
-            insert into Jugadores(nombre,puntaje) values("pepe",20)
-            '''
-#sql_table(sentencia_3)
+            conexion.execute(sentencia)
+            print("Se creo la tabla personajes")
+        except sqlite3.OperationalError:
+            print("La tabla personajes ya existe")
+
+def crear_personaje():
+    with sqlite3.connect("SQL/personaje.db") as conexion:
+        try:
+            conexion.execute("insert into personajes(nombre,puntaje)values (?,?)", ("jugador",0))
+        except sqlite3.OperationalError:
+            print("La tabla personajes ya existe")
+
+def traer_id_ultimo():
+    try:
+        with sqlite3.connect("SQL/personaje.db") as conexion:
+            cursor = conexion.cursor()
+            cursor.execute('SELECT MAX(id) FROM personajes')
+            resultado = cursor.fetchone()
+            id_mayor = resultado[0]
+            return(id_mayor)
+    except:
+        print("Error al traer ultimo id de la tabla")
+
+def ultimo_puntaje(id):
+    try:
+        with sqlite3.connect("SQL/personaje.db") as conexion:
+            cursor = conexion.cursor()
+            cursor.execute(f'SELECT puntaje FROM personajes WHERE id={id}')
+            resultado = cursor.fetchone()
+            ultimo_puntaje = resultado[0]
+            return(ultimo_puntaje)
+    except:
+        print("Error al traer ultimo id de la tabla")
+
+def actualizar_nombre(nombre,id):
+    try:
+        with sqlite3.connect("SQL/personaje.db") as conexion:
+            sentencia = "UPDATE personajes SET nombre = ?  WHERE id=?"
+            conexion.execute(sentencia,(nombre,id,))
+    except:
+        print("Error al actualizar el nombre")
+
+def actualizar_puntos(puntos,id):
+    try:
+        with sqlite3.connect("SQL/personaje.db") as conexion:
+            sentencia = "UPDATE personajes SET puntaje = ?  WHERE id=?"
+            conexion.execute(sentencia,(puntos,id,))
+    except:
+        print("Error al actualizar el nombre")
+
+def ver_puntuacion():
+    with sqlite3.connect("SQL/personaje.db") as conexion:
+        try:
+            cursor = conexion.cursor()
+            cursor.execute('SELECT nombre,puntaje FROM personajes ORDER BY puntaje DESC LIMIT 4')
+            resultado = cursor.fetchall()
+            return resultado
+        except :
+            print("Error obteniendo puntuacion")
+    
+
+crear_tabla()
+
+
 

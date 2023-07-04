@@ -1,7 +1,7 @@
 import sys
 from config import *
 from API.GUI_form_prueba import *
-from SQL.sql import sql_table, crear_table
+from SQL.sql import *
 
 pygame.init()
 
@@ -19,18 +19,8 @@ cronometro = pygame.time.get_ticks
 form_prueba = FormPrueba(PANTALLA, 0, 0, PANTALLA.get_width(),PANTALLA.get_height())
 
 # BASE DE DATOS #######################################################
-sentencia_5 = '''
-            delete from  Jugadores
-            
-            '''
-crear_table(sentencia_5)
-
-sentencia_1 = '''
-            insert into Jugadores(id,nombre,puntaje) values(1,"Jugador 1",0)
-            '''
-crear_table(sentencia_1)
-
-mensaje_antiguo =""
+crear_personaje()
+mensaje_antiguo = ""
 
 while True:
     RELOJ.tick(FPS)
@@ -43,9 +33,13 @@ while True:
         if evento.type == pygame.MOUSEBUTTONDOWN:
             print(pygame.mouse.get_pos())
             
-    form_prueba.update(lista_eventos)
+    try:
+        form_prueba.update(lista_eventos)
+    except:
+        print("Error en el funcionamiento del juego")
     if form_prueba.ingreso_txt_box() != "" and form_prueba.ingreso_txt_box() != mensaje_antiguo:
         mensaje_antiguo = form_prueba.ingreso_txt_box()
-        actualizar_nombre_tabla(mensaje_antiguo)
+        ultimo_id = traer_id_ultimo()
+        actualizar_nombre(mensaje_antiguo,ultimo_id)
 
     pygame.display.update()

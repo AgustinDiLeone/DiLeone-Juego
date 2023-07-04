@@ -33,12 +33,7 @@ class FormMenuScore(Form):
 
         pos_inicial_y = margen_y
 
-        personajes_puntos = '''
-                    select nombre,puntaje
-                    from Jugadores
-                    order by puntaje desc limit 1
-                    '''
-        self.score = sql_table(personajes_puntos)
+        self.score = ver_puntuacion()
         
         for lista in self.score:
             pos_inicial_x = margen_x
@@ -56,5 +51,8 @@ class FormMenuScore(Form):
     def update(self,lista_eventos):
         if self.active:
             for wid in self.lista_widgets:
-                wid.update(lista_eventos)
+                try:
+                    wid.update(lista_eventos)
+                except:
+                    print("Error en el funcionamiento de la pantalla score del juego")
             self.draw()

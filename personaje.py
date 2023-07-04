@@ -2,9 +2,7 @@ import pygame
 from  config import *
 from disparo import Disparo
 from API.GUI_form_prueba import *
-from SQL.sql import sql_table
-#from main import form_prueba
-#from main import *
+from SQL.sql import *
 
 class Personaje(pygame.sprite.Sprite):
     def __init__(self,pantalla, imagen, size:tuple, x, y, velocidad,potencia_salto, acciones, disparo=True) -> None:
@@ -40,11 +38,6 @@ class Personaje(pygame.sprite.Sprite):
         self.path_disparo = disparo
         self.retrazo_disparo = 1000
         self.ultimo_disparo = pygame.time.get_ticks()
-        self.nombre = "Jugador 1"
-        sentencia = f'''
-            insert into Jugadores(nombre,puntaje) values("{self.nombre}",{self.puntuacion})
-            '''
-        sql_table(sentencia)
 
         self.crear_rectangulos()
 
@@ -209,8 +202,13 @@ class Personaje(pygame.sprite.Sprite):
             pantalla.blit(self.corazon,(200,20))
     
     def actualizar_puntos(self):
-        actualizar_puntos_tabla(self.puntuacion)
+        ultimo_id = traer_id_ultimo()
+        ultimo_puntos = ultimo_puntaje(ultimo_id)
+        puntos_obtenidos = self.puntuacion - self.puntuacion_vieja
+        puntaje = ultimo_puntos + puntos_obtenidos
+        actualizar_puntos(puntaje,ultimo_id)
         self.puntuacion_vieja = self.puntuacion
+
 
     def update(self, slave,lista_plataformas,enemigo,omnitrix,corazones,sierra,veneno):
         if self.puntuacion != self.puntuacion_vieja:

@@ -64,7 +64,10 @@ class FormSonido(Form):
                 self.draw()
                 self.render()
                 for widgets in self.lista_widgets:
-                    widgets.update(lista_eventos)
+                    try:
+                        widgets.update(lista_eventos)
+                    except:
+                        print("Error en el funcionamiento del juego")
                 self.update_volumen(lista_eventos)
         else:
             self.hijo.update(lista_eventos)
