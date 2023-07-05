@@ -124,25 +124,26 @@ class Personaje(pygame.sprite.Sprite):
         self.lista_proyectiles.append(bala)
 
     def collision(self,personaje,omnitrix,corazones,sierra,veneno):
-        if personaje.esta_vivo:
-            if self.rect_bottom.colliderect(personaje.rect_top):
-                personaje.vidas -= 1
-                self.puntuacion += 200
-            elif self.rect.colliderect(personaje.rect):
-                self.vidas -= 1
-                self.muerte()
-            for x in personaje.lista_proyectiles:
-                if x.disparo_rect.colliderect(self.rect):
+        for y in personaje:
+            if y.esta_vivo:
+                if self.rect_bottom.colliderect(y.rect_top):
+                    y.vidas -= 1
+                    self.puntuacion += 200
+                elif self.rect.colliderect(y.rect):
                     self.vidas -= 1
                     self.muerte()
-                    x.disparo_activo = False
-                    personaje.lista_proyectiles.remove(x)
-            for x in self.lista_proyectiles:
-                if x.disparo_rect.colliderect(personaje.rect):
-                    x.disparo_activo = False
-                    self.lista_proyectiles.remove(x)
-                    personaje.vidas -= 1
-                    self.puntuacion += 100
+                for x in y.lista_proyectiles:
+                    if x.disparo_rect.colliderect(self.rect):
+                        self.vidas -= 1
+                        self.muerte()
+                        x.disparo_activo = False
+                        y.lista_proyectiles.remove(x)
+                for x in self.lista_proyectiles:
+                    if x.disparo_rect.colliderect(y.rect):
+                        x.disparo_activo = False
+                        self.lista_proyectiles.remove(x)
+                        y.vidas -= 1
+                        self.puntuacion += 100
         for x in omnitrix:
             if x.activo and self.rect.colliderect(x.rect):
                 pygame.mixer.Sound(r"RECURSOS\agarrar.wav").play()
@@ -183,15 +184,17 @@ class Personaje(pygame.sprite.Sprite):
     
     def ganar(self,personaje,omnitrix,corazones):
         flag = True
-        if not personaje.esta_vivo:
-            for x in omnitrix:
-                if x.activo:
-                    flag = False
-            for x in corazones:
-                if x.activo:
-                    flag = False
-            if flag:
-                self.gano = True
+        for x in personaje:
+            if x.esta_vivo:
+                flag =  False
+        for x in omnitrix:
+            if x.activo:
+                flag = False
+        for x in corazones:
+            if x.activo:
+                flag = False
+        if flag:
+            self.gano = True
 
     def mostrar_vidas(self,pantalla):
         if self.vidas >= 1:

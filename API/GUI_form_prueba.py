@@ -56,10 +56,7 @@ class FormPrueba(Form):
                 self.draw()
                 self.render()
                 for widgets in self.lista_widgets:
-                    try:
-                        widgets.update(lista_eventos)
-                    except:
-                        print("Error en el funcionamiento del juego")
+                    widgets.update(lista_eventos)
         else:
             self.hijo.update(lista_eventos)
 
@@ -80,5 +77,4 @@ class FormPrueba(Form):
     def btn_tabla_click(self,texto):
         form_puntaje = FormMenuScore(self._master,340,30,500,650,"Green","White",True,r"RECURSOS\fondo_puntuacion.jpg",
                                     "dic_score",100,10,10)
-
         self.show_dialog(form_puntaje)

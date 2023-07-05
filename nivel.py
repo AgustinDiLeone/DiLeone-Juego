@@ -5,6 +5,7 @@ from personaje import Personaje
 from enemigo import Enemigo
 from especiales import Especial
 from plataformas import plataforma
+from SQL.sql import traer_id_ultimo, ultimo_puntaje,actualizar_puntos
 
 
 class Nivel():
@@ -19,7 +20,8 @@ class Nivel():
         self.sierra = sierra
         self.veneno = veneno
         self.comienzo = time.time()
-        
+        self.tiempo_transcurrido = 0
+        self.flag_puntos_tiempo = True
 
     def leer_inputs(self):
         keys = pygame.key.get_pressed()
@@ -66,48 +68,97 @@ class Nivel():
         self.slave.blit(self.img_fondo, (0,0))
 
         for platform in self.plataformas: 
-            platform.update(self.slave)
-
-        self.jugador.update(self.slave,self.plataformas,self.enemigo,self.omnitrix,self.corazones,self.sierra,self.veneno)
-
-        self.enemigo.update(self.slave)
-
+            try:
+                platform.update(self.slave)
+            except:
+                print("Error en la actualizacion de las plataformas")
+        
+        try:
+            self.jugador.update(self.slave,self.plataformas,self.enemigo,self.omnitrix,self.corazones,self.sierra,self.veneno)
+        except:
+            print("Error en la actualizacion del personaje")
+        
+        for x in self.enemigo:
+            try:
+                x.update(self.slave)
+            except:
+                print("Error en la actualizacion del enemigo")
+        
         for x in self.omnitrix:
-            x.update(self.slave)
+            try:
+                x.update(self.slave)
+            except:
+                print("Error en la actualizacion del omnitrix")
     
         for x in self.corazones:
-            x.update(self.slave)
+            try:
+                x.update(self.slave)
+            except:
+                print("Error en la actualizacion de los corazones")
 
         for x in self.veneno:
-            x.update(self.slave)
+            try:
+                x.update(self.slave)
+            except:
+                print("Error en la actualizacion del veneno")
         
         for x in self.sierra:
-            x.update(self.slave)
+            try:
+                x.update(self.slave)
+            except:
+                print("Error en la actualizacion de la sierra")
         # FUENTE ##############################################################
         fuente = pygame.font.SysFont("Arco Font",70)
-        # FORMULARIOS   #########################################################3
+        # FORMULARIOS   #########################################################
         info1 = pygame.Rect(0,0,WIDTH,75)
         pygame.draw.rect(self.slave, "black",info1 ,100)
 
-        tiempo_transcurrido = time.time() - self.comienzo
-        if tiempo_transcurrido >= 60:
+        self.tiempo_transcurrido = time.time() - self.comienzo
+        if self.tiempo_transcurrido >= 60:
             self.jugador.esta_vivo = False
             self.jugador.vidas = 0
         else:
-            if tiempo_transcurrido > 50:
-                tiempo = fuente.render(f"00:0{int(60-tiempo_transcurrido)}", True, "White")
+            if self.tiempo_transcurrido > 50:
+                tiempo = fuente.render(f"00:0{int(60-self.tiempo_transcurrido)}", True, "White")
             else:
-                tiempo = fuente.render(f"00:{int(60-tiempo_transcurrido)}", True, "White")
-            self.slave.blit(tiempo, (500,20))
+                tiempo = fuente.render(f"00:{int(60-self.tiempo_transcurrido)}", True, "White")
+            try:
+                self.slave.blit(tiempo, (500,20))
+            except:
+                print("Error en la actualizacion del tiempo")
         score = fuente.render(f"Score:{self.jugador.puntuacion}", True, "White")
-        self.slave.blit(score, (912,20))
-        self.jugador.mostrar_vidas(self.slave)
+        try:
+            self.slave.blit(score, (912,20))
+        except:
+            print("Error en la actualizacion del puntaje")
+        try:
+            self.jugador.mostrar_vidas(self.slave)
+        except:
+            print("Error en la actualizacion de las vidas")
 
     def update(self,lista_eventos):
         if self.jugador.gano:
             win = pygame.image.load(r"RECURSOS\fondo_gano.png")
             win = pygame.transform.scale(win,(WIDTH,HEIGHT))
             self.slave.blit(win, (0,0))
+            tiempo_restante = 60 - int(self.tiempo_transcurrido)
+            if self.flag_puntos_tiempo:
+                # SUMAR Y ACTUALIZAR PUNTOS ####################
+                ultimo_id = traer_id_ultimo()
+                ultimo_puntos = ultimo_puntaje(ultimo_id)
+                puntos = tiempo_restante * 100
+                puntaje = ultimo_puntos + puntos
+                actualizar_puntos(puntaje,ultimo_id)
+                self.flag_puntos_tiempo = False
+                self.puntos_obtenidos_tiempo = puntos
+            # FUENTE ##############################################################
+            fuente = pygame.font.SysFont("Arco Font",70)
+            # FORMULARIOS   #########################################################
+            info1 = pygame.Rect(0,0,350,75)
+            pygame.draw.rect(self.slave, "black",info1 ,100)
+            puntos = fuente.render(f"+{self.puntos_obtenidos_tiempo} score", True, "White")
+            self.slave.blit(puntos,(50,20))
+            
         else:
             if self.jugador.esta_vivo:
                 self.leer_inputs()

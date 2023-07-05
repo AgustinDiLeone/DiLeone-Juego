@@ -38,12 +38,12 @@ class NivelDos(Nivel):
 
         piso = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (WIDTH,82),0,HEIGHT-82)
 
-        plataforma_a = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (400,50),0,260)
-        plataforma_b = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (700,50),260,430)
-        plataforma_c = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (700,50),1040,540)
-        plataforma_d = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (260,50),480,315)
-        plataforma_e = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (200,50),780,245)
-        plataforma_f = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (200,50),1000,200)
+        plataforma_a = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (350,50),0,300)
+        plataforma_b = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (350,50),900,300)
+        plataforma_c = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (350,50),450,400)
+        plataforma_d = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (300,50),0,500)
+        plataforma_e = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (300,50),900,500)
+        plataforma_f = plataforma(self.pantalla,r"RECURSOS\piso_hielo.png", (250,50),500,200)        
 
         lista_plataformas = [piso, plataforma_a,plataforma_b,plataforma_c,plataforma_d,plataforma_e,plataforma_f]
 
@@ -60,9 +60,11 @@ class NivelDos(Nivel):
         ]
         enemigo_00_movimientos = [quieto_00,correr_00]
 
-        enemigo = Enemigo(self.pantalla, quieto_00[0],(60,90),530,380,enemigo_00_movimientos,900,260)
+        enemigo = Enemigo(self.pantalla, quieto_00[0],(60,90),145,250,enemigo_00_movimientos,290,0)
+        enemigo_01 = Enemigo(self.pantalla, quieto_00[0],(60,90),85,450,enemigo_00_movimientos,240,0)
+        enemigo_02 = Enemigo(self.pantalla, quieto_00[0],(60,90),551,350,enemigo_00_movimientos,740,450)
 
-
+        enemigos = [enemigo, enemigo_01, enemigo_02]
         # OMNITRIX 
         omni = pygame.image.load("RECURSOS\omnitrix.png")
         imagen_omnitrix = [
@@ -71,9 +73,11 @@ class NivelDos(Nivel):
             pygame.transform.flip(omni,True,False),
             pygame.transform.flip(omni,True,False)
         ]
-        omnitrix_1 = Especial(80,220,self.pantalla,imagen_omnitrix)
+        omnitrix_1 = Especial(70,220,self.pantalla,imagen_omnitrix)
         omnitrix_2 = Especial(1120,460,self.pantalla,imagen_omnitrix)
-        omnitrix = [omnitrix_1,omnitrix_2]
+        omnitrix_3 = Especial(30,450,self.pantalla,imagen_omnitrix)
+        omnitrix_4 = Especial(740,100,self.pantalla,imagen_omnitrix)
+        omnitrix = [omnitrix_1,omnitrix_2,omnitrix_3,omnitrix_4]
 
         # CORAZON
         cora = pygame.image.load("RECURSOS\corazon.png")
@@ -84,7 +88,8 @@ class NivelDos(Nivel):
             pygame.transform.flip(cora,True,False)
         ]
         corazon = Especial(1100,150,self.pantalla,imagen_corazon)
-        corazones = [corazon]
+        corazon_1 = Especial(580,150,self.pantalla,imagen_corazon)
+        corazones = [corazon,corazon_1]
 
         # VENENO
         imagen_veneno = [
@@ -93,14 +98,19 @@ class NivelDos(Nivel):
             pygame.image.load("RECURSOS\sprite_veneno3.png"),
             pygame.image.load("RECURSOS\sprite_veneno4.png")
         ]
-        veneno = Especial(860,190,self.pantalla,imagen_veneno)
+        veneno = Especial(472,530,self.pantalla,imagen_veneno)
         veneno_2 = Especial(577,260,self.pantalla,imagen_veneno)
-        venenos = [veneno,veneno_2]
+        veneno_3 = Especial(380,350,self.pantalla,imagen_veneno)
+        veneno_4 = Especial(800,160,self.pantalla,imagen_veneno)
+        veneno_5 = Especial(800,100,self.pantalla,imagen_veneno)
+        venenos = [veneno,veneno_2,veneno_3,veneno_4,veneno_5]
 
         # SIERRA
         sierra = [pygame.image.load("RECURSOS\sprite_sierra.png"),
                 pygame.image.load("RECURSOS\sprite_sierra_2.png")]
-        sierra_1 = Slider(0,240,self.pantalla,sierra,350,0)
-        sierras = [sierra_1]
+        sierra_1 = Slider(950,465,self.pantalla,sierra,1160,900)
+        sierra_2 = Slider(1170,200,self.pantalla,sierra,300,80,"vertical")
+        sierra_3 = Slider(1020,200,self.pantalla,sierra,220,80,"vertical")
+        sierras = [sierra_1,sierra_2,sierra_3]
         
-        super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigo, omnitrix, corazones,sierras,venenos)
+        super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigos, omnitrix, corazones,sierras,venenos)

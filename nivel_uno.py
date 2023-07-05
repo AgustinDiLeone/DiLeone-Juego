@@ -64,8 +64,9 @@ class NivelUno(Nivel):
         enemigo_00_movimientos = [quieto_00,correr_00]
 
         enemigo = Enemigo(pantalla, quieto_00[0],(60,90),900,300,enemigo_00_movimientos,990,430)
-
-
+        enemigo_2 = Enemigo(pantalla, quieto_00[0],(60,90),100,180,enemigo_00_movimientos,240,0)
+        enemigo_3 = Enemigo(pantalla, quieto_00[0],(60,90),1000,125,enemigo_00_movimientos,1140,900)
+        enemigos = [enemigo,enemigo_2,enemigo_3]
         # OMNITRIX 
         omni = pygame.image.load("RECURSOS\omnitrix.png")
         imagen_omnitrix = [
@@ -74,7 +75,7 @@ class NivelUno(Nivel):
             pygame.transform.flip(omni,True,False),
             pygame.transform.flip(omni,True,False)
         ]
-        omnitrix_1 = Especial(80,220,pantalla,imagen_omnitrix)
+        omnitrix_1 = Especial(470,150,pantalla,imagen_omnitrix)
         omnitrix_2 = Especial(1120,460,pantalla,imagen_omnitrix)
         omnitrix = [omnitrix_1,omnitrix_2]
 
@@ -87,10 +88,11 @@ class NivelUno(Nivel):
             pygame.transform.flip(cora,True,False)
         ]
         corazon = Especial(1100,150,pantalla,imagen_corazon)
-        corazones = [corazon]
+        corazon_1 = Especial(50,400,pantalla,imagen_corazon)
+        corazones = [corazon,corazon_1]
         # Sierra 
         sierra = []
         # Veneno 
         veneno = []
         
-        super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigo, omnitrix, corazones,sierra,veneno)
+        super().__init__(pantalla, personaje_principal, lista_plataformas, img_fondo, enemigos, omnitrix, corazones,sierra,veneno)

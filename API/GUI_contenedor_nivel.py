@@ -14,7 +14,6 @@ class FormContenedorNivel(Form):
         self.btn_home = Button_Image(self._slave,self._x,self._y,self._w-100,self._h-100,50,50,r"RECURSOS\boton_settings.png",self.btn_home_click,"")
         self.lista_widgets.append(self.btn_home)
 
-    
     def update(self, lista_eventos):
         self.nivel.update(lista_eventos)
         for x in self.lista_widgets:
@@ -23,7 +22,6 @@ class FormContenedorNivel(Form):
             except:
                 print("Error en el selector de niveles del juego")
         self.draw()
-    
 
     def btn_home_click(self,param):
         self.end_dialog()

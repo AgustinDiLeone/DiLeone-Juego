@@ -1,8 +1,8 @@
-import sys
+import sys,os
 from config import *
 from API.GUI_form_prueba import *
-from SQL.sql import *
-
+from SQL.sql import traer_id_ultimo,actualizar_nombre
+os.system("cls")
 pygame.init()
 
 PANTALLA = pygame.display.set_mode(SIZE_SCREEN)
@@ -32,11 +32,10 @@ while True:
             sys.exit(0)
         if evento.type == pygame.MOUSEBUTTONDOWN:
             print(pygame.mouse.get_pos())
-            
     try:
         form_prueba.update(lista_eventos)
     except:
-        print("Error en el funcionamiento del juego")
+        print("Error en la actualizacion del juego")
     if form_prueba.ingreso_txt_box() != "" and form_prueba.ingreso_txt_box() != mensaje_antiguo:
         mensaje_antiguo = form_prueba.ingreso_txt_box()
         ultimo_id = traer_id_ultimo()
